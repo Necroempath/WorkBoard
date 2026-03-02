@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using WorkBoard.Application.Features.Workspaces.CreateWorkspace;
-using WorkBoard.Application.Services;
 using WorkBoard.Domain;
 
 namespace WorkBoard.API.Controllers;
@@ -9,22 +9,22 @@ namespace WorkBoard.API.Controllers;
 [ApiController]
 public class WorkspaceControllers : ControllerBase
 {
-    private readonly WorkspaceService _service;
+    private readonly IMediator _mediator;
 
-    public WorkspaceControllers(WorkspaceService service)
+    public WorkspaceControllers(IMediator mediator)
     {
-        _service = service;
+        _mediator = mediator;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Workspace>>> GetAll()
+    public async Task<ActionResult<IEnumerable<Workspace>>> GetAll(CancellationToken token)
     {
-        return Ok(await _service.GetAllAsync(new CancellationToken()));
+        return Ok(await _mediator.Send(token));
     }
 
     [HttpPost]
-    public async Task<ActionResult<IEnumerable<Workspace>>> Create([FromBody]CreateWorkspaceCommand command)
+    public async Task<ActionResult<Workspace>> Create([FromBody]CreateWorkspaceCommand command, CancellationToken token)
     {
-        return Ok(await _service.CreateAsync(command, new CancellationToken()));
+        return Ok(await _mediator.Send(command, token));
     }
 }

@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using WorkBoard.Application.Features.Workspaces.CreateWorkspace;
 using WorkBoard.Application.Interfaces;
-using WorkBoard.Application.Services;
 using WorkBoard.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,8 +17,6 @@ builder.Services.AddDbContext<WorkBoardDbContext>(options =>
         builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddScoped<IWorkspaceRepository, EfWorkspaceRepository>();
-builder.Services.AddScoped<WorkspaceService>();
-builder.Services.AddScoped<CreateWorkspaceHandler>();
 
 var app = builder.Build();
 
