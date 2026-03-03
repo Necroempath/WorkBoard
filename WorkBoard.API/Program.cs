@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using WorkBoard.Application;
 using WorkBoard.Application.Interfaces;
 using WorkBoard.Infrastructure.Persistence;
 
@@ -17,6 +18,11 @@ builder.Services.AddDbContext<WorkBoardDbContext>(options =>
         builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddScoped<IWorkspaceRepository, EfWorkspaceRepository>();
+
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(ApplicationMarker).Assembly));
+
+builder.Services.AddAutoMapper(typeof(ApplicationMarker).Assembly);
 
 var app = builder.Build();
 

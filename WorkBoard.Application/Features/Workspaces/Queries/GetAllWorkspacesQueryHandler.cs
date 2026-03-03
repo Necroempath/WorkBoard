@@ -4,18 +4,18 @@ using WorkBoard.Application.Interfaces;
 
 namespace WorkBoard.Application.Features.Workspaces.Queries;
 
-public class GetAllWorkspacesQueriesHandler : IRequestHandler<GetAllWorkspacesQueries, IEnumerable<WorkspaceResponseDto>>
+public class GetAllWorkspacesQueryHandler : IRequestHandler<GetAllWorkspacesQuery, IEnumerable<WorkspaceResponseDto>>
 {
     private readonly IWorkspaceRepository _repository;
     private readonly IMapper _mapper;
 
-    public GetAllWorkspacesQueriesHandler(IWorkspaceRepository repository, IMapper mapper)
+    public GetAllWorkspacesQueryHandler(IWorkspaceRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<WorkspaceResponseDto>> Handle(GetAllWorkspacesQueries request, CancellationToken token)
+    public async Task<IEnumerable<WorkspaceResponseDto>> Handle(GetAllWorkspacesQuery request, CancellationToken token)
     {
         var workspaces = await _repository.GetAllAsync(token);
 

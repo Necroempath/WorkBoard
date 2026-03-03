@@ -2,4 +2,4 @@
 
 namespace WorkBoard.Application.Features.Workspaces.CreateWorkspace;
 
-public sealed record CreateWorkspaceCommand(string Name, Guid OwnerId) : IRequest<WorkspaceResponseDto>;
+public sealed record CreateWorkspaceCommand(CreateWorkspaceDto Dto) : IRequest<WorkspaceResponseDto>;

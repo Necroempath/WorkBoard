@@ -19,7 +19,8 @@ namespace WorkBoard.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -34,7 +35,8 @@ namespace WorkBoard.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WorkspaceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -56,7 +58,8 @@ namespace WorkBoard.Infrastructure.Migrations
                     ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Order = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -81,7 +84,8 @@ namespace WorkBoard.Infrastructure.Migrations
                     ColumnId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Order = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {

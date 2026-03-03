@@ -18,7 +18,7 @@ public sealed class CreateWorkspaceCommandHandler : IRequestHandler<CreateWorksp
 
     public async Task<WorkspaceResponseDto> Handle(CreateWorkspaceCommand command, CancellationToken token)
     {
-        var workspace = _mapper.Map<Workspace>(command);
+        var workspace = _mapper.Map<Workspace>(command.Dto);
 
         await _repository.AddAsync(workspace, token);
 

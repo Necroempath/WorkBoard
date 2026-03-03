@@ -1,5 +1,17 @@
 ﻿namespace WorkBoard.Application.Features.Workspaces;
 
-public sealed class WorkspaceResponseDto(Guid Id, string Name, Guid OwnerId);
-public sealed class CreateWorkspaceDto(string Name, Guid OwnerId);
-public sealed class UpdateWorkspaceDto(string Name);
+public sealed class WorkspaceResponseDto
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public Guid OwnerId { get; set; }
+}
+public sealed class CreateWorkspaceDto
+{
+    public string Name { get; set; } = string.Empty;
+    public Guid OwnerId { get; set; }
+}
+public sealed class UpdateWorkspaceDto
+{
+    public string Name { get; set; } = string.Empty;
+}
