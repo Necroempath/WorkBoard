@@ -1,17 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
+﻿//using Microsoft.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore.Design;
 
-namespace WorkBoard.Infrastructure.Persistence;
-public sealed class WorkBoardDbContextFactory : IDesignTimeDbContextFactory<WorkBoardDbContext>
-{
-    public WorkBoardDbContext CreateDbContext(string[] args)
-    {
-        var optionsBuilder = new DbContextOptionsBuilder<WorkBoardDbContext>();
+//namespace WorkBoard.Infrastructure.Persistence;
+//public sealed class WorkBoardDbContextFactory : IDesignTimeDbContextFactory<WorkBoardDbContext>
+//{
+//    public WorkBoardDbContext CreateDbContext(string[] args)
+//    {
+//        var optionsBuilder = new DbContextOptionsBuilder<WorkBoardDbContext>();
 
-        var connectionString = Environment.GetEnvironmentVariable("WORKBOARD_DB");
+//        optionsBuilder.UseSqlServer(
+//            "Server=localhost;Database=WorkBoardDb;Trusted_Connection=True;TrustServerCertificate=True");
 
-        optionsBuilder.UseSqlServer(connectionString);
-
-        return new WorkBoardDbContext(optionsBuilder.Options);
-    }
-}
+//        return new WorkBoardDbContext(optionsBuilder.Options);
+//    }
+//}

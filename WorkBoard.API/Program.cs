@@ -20,6 +20,7 @@ builder.Services.AddDbContext<WorkBoardDbContext>(options =>
         builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddScoped<IWorkspaceRepository, EfWorkspaceRepository>();
+builder.Services.AddScoped<IUserRepository, EfUserRepository>();
 
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(ApplicationMarker).Assembly));
