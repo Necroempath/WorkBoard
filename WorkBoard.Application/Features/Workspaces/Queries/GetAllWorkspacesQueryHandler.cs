@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
+using WorkBoard.Application.Features.DTOs;
 using WorkBoard.Application.Interfaces;
 
 namespace WorkBoard.Application.Features.Workspaces.Queries;
 
-public class GetAllWorkspacesQueryHandler : IRequestHandler<GetAllWorkspacesQuery, IEnumerable<WorkspaceResponseDto>>
+public sealed class GetAllWorkspacesQueryHandler : IRequestHandler<GetAllWorkspacesQuery, IEnumerable<WorkspaceResponseDto>>
 {
     private readonly IWorkspaceRepository _repository;
     private readonly IMapper _mapper;
@@ -15,7 +16,7 @@ public class GetAllWorkspacesQueryHandler : IRequestHandler<GetAllWorkspacesQuer
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<WorkspaceResponseDto>> Handle(GetAllWorkspacesQuery request, CancellationToken token)
+    public async Task<IEnumerable<WorkspaceResponseDto>> Handle(GetAllWorkspacesQuery query, CancellationToken token)
     {
         var workspaces = await _repository.GetAllAsync(token);
 

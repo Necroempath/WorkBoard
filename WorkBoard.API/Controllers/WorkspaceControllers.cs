@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WorkBoard.Application.Features.Workspaces;
+using WorkBoard.Application.Features.DTOs;
 using WorkBoard.Application.Features.Workspaces.CreateWorkspace;
 using WorkBoard.Application.Features.Workspaces.Queries;
 using WorkBoard.Domain;
@@ -9,7 +9,7 @@ namespace WorkBoard.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class WorkspaceControllers : ControllerBase
+public sealed class WorkspaceControllers : ControllerBase
 {
     private readonly IMediator _mediator;
 
@@ -25,7 +25,7 @@ public class WorkspaceControllers : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Workspace>> Create([FromBody]CreateWorkspaceDto dto, CancellationToken token)
+    public async Task<ActionResult<Workspace>> Create([FromBody]CreateWorkspaceRequest dto, CancellationToken token)
     {
         return Ok(await _mediator.Send(new CreateWorkspaceCommand(dto), token));
     }

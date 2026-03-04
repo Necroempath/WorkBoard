@@ -1,15 +1,18 @@
 ﻿using AutoMapper;
-using WorkBoard.Application.Features.Workspaces;
+using WorkBoard.Application.Features.DTOs;
 using WorkBoard.Domain;
 
 namespace WorkBoard.Application.Mapping;
 
-class MappingProfile : Profile
+sealed class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        // Workspace 
         CreateMap<Workspace, WorkspaceResponseDto>();
+        CreateMap<CreateWorkspaceRequest, Workspace>();
 
-        CreateMap<CreateWorkspaceDto, Workspace>();
+        // Auth
+        CreateMap<User, AuthResponseDto>();
     }
 }

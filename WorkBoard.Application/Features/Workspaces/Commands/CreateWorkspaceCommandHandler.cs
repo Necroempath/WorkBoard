@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using WorkBoard.Application.Features.DTOs;
 using WorkBoard.Application.Interfaces;
 using WorkBoard.Domain;
 
@@ -18,7 +19,7 @@ public sealed class CreateWorkspaceCommandHandler : IRequestHandler<CreateWorksp
 
     public async Task<WorkspaceResponseDto> Handle(CreateWorkspaceCommand command, CancellationToken token)
     {
-        var workspace = _mapper.Map<Workspace>(command.Dto);
+        var workspace = _mapper.Map<Workspace>(command.Request);
 
         await _repository.AddAsync(workspace, token);
 

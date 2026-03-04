@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using WorkBoard.Application;
 using WorkBoard.Application.Interfaces;
+using WorkBoard.Infrastructure;
+using WorkBoard.Infrastructure.JwtToken;
 using WorkBoard.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +25,14 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(ApplicationMarker).Assembly));
 
 builder.Services.AddAutoMapper(typeof(ApplicationMarker).Assembly);
+
+builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
+
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("JwtSettings"));
+
+builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 
 var app = builder.Build();
 

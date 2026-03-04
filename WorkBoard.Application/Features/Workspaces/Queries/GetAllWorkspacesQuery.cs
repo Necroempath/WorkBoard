@@ -1,5 +1,6 @@
 ﻿using MediatR;
+using WorkBoard.Application.Features.DTOs;
 
 namespace WorkBoard.Application.Features.Workspaces.Queries;
 
-public record GetAllWorkspacesQuery : IRequest<IEnumerable<WorkspaceResponseDto>>;
+public sealed record GetAllWorkspacesQuery : IRequest<IEnumerable<WorkspaceResponseDto>>;

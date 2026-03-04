@@ -1,4 +1,4 @@
-﻿namespace WorkBoard.Application.Features.Workspaces;
+﻿namespace WorkBoard.Application.Features.DTOs;
 
 public sealed class WorkspaceResponseDto
 {
@@ -6,12 +6,12 @@ public sealed class WorkspaceResponseDto
     public string Name { get; set; } = string.Empty;
     public Guid OwnerId { get; set; }
 }
-public sealed class CreateWorkspaceDto
+public sealed class CreateWorkspaceRequest
 {
     public string Name { get; set; } = string.Empty;
     public Guid OwnerId { get; set; }
 }
-public sealed class UpdateWorkspaceDto
+public sealed class UpdateWorkspaceRequest
 {
     public string Name { get; set; } = string.Empty;
 }
