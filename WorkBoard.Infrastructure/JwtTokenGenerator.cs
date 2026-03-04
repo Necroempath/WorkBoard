@@ -5,8 +5,9 @@ using System.Security.Claims;
 using System.Text;
 using WorkBoard.Application.Interfaces;
 using WorkBoard.Domain;
+using WorkBoard.Infrastructure.JwtToken;
 
-namespace WorkBoard.Infrastructure.JwtToken;
+namespace WorkBoard.Infrastructure;
 
 public sealed class JwtTokenGenerator : IJwtTokenGenerator
 {
