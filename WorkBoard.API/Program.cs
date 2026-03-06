@@ -1,5 +1,6 @@
 
 using WorkBoard.API.Extensions;
+using WorkBoard.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,5 +22,7 @@ if (app.Environment.IsDevelopment())
 app.UseInfrastructure();
 
 app.MapControllers();
+
+await app.EnsureRoleSeededAsync();
 
 app.Run();

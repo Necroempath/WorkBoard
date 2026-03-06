@@ -4,11 +4,11 @@ using WorkBoard.Domain;
 
 namespace WorkBoard.Infrastructure.Persistence.Configurations;
 
-public sealed class WorkspaceConfiguration : IEntityTypeConfiguration<Workspace>
+public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<Workspace> builder)
+    public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.ToTable("Workspaces");
+        builder.ToTable("Users");
 
         builder.HasKey(x => x.Id);
 
@@ -16,11 +16,19 @@ public sealed class WorkspaceConfiguration : IEntityTypeConfiguration<Workspace>
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.Property(x => x.OwnerId)
-            .IsRequired();
+        builder.Property(x => x.Email)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.Property(x => x.PasswordHash)
+            .IsRequired()
+            .HasMaxLength(256);
 
         builder.Property(c => c.CreatedAt)
             .HasDefaultValueSql("GETUTCDATE()")
             .IsRequired();
+
+        builder.HasMany(u => u.Roles)
+            .WithMany(r => r.Users);
     }
 }

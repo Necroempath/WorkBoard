@@ -8,6 +8,7 @@ public sealed class WorkBoardDbContext : DbContext
 {
     public DbSet<Workspace> Workspaces => Set<Workspace>();
     public DbSet<User> Users => Set<User>();
+    public DbSet<Role> Roles => Set<Role>();
 
     public WorkBoardDbContext(DbContextOptions<WorkBoardDbContext> options) : base(options) { }
 
