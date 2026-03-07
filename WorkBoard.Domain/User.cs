@@ -4,17 +4,16 @@ namespace WorkBoard.Domain;
 
 public sealed class User : BaseEntity
 {
-    private readonly HashSet<Role> _roles = new();
+    private readonly List<UserRole> _roles = new();
     public string Name { get; private set; } = string.Empty;
     public string Email { get; private set; } = string.Empty;
     public string PasswordHash { get; private set; } = string.Empty;
-    public IReadOnlySet<Role> Roles => _roles;
+    public IReadOnlyCollection<UserRole> Roles => _roles;
 
     private User() { }
 
     public User(string name, string email, string passwordHash)
     {
-        AssignRole(new Role("User"));
         SetName(name);
         SetEmail(email);
         SetPasswordHash(passwordHash);
@@ -34,15 +33,25 @@ public sealed class User : BaseEntity
     {
         SetPasswordHash(passwordHash);
     }
-
     public void AssignRole(Role role)
     {
-        _roles.Add(role);
+        if (HasRole(role.Name))
+            return;
+
+        _roles.Add(new UserRole(this, role));
+    }
+
+    public bool HasRole(string roleName)
+    {
+        return _roles.Any(r => r.Role.Name == roleName);
     }
 
     public void RemoveRole(Role role)
     {
-        _roles.Remove(role);
+        var userRole = _roles.FirstOrDefault(ur => ur.RoleId == role.Id);
+
+        if (userRole != null)
+            _roles.Remove(userRole);
     }
 
     private void SetName(string name)

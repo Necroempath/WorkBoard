@@ -23,15 +23,11 @@ public sealed class EfUserRepository : IUserRepository
 
     public async Task<User?> GetByEmailAsync(string email, CancellationToken token)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-
-        return user;
+        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task<User?> GetByIdAsync(Guid id, CancellationToken token)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-
-        return user;
+        return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
     }
 }

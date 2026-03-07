@@ -13,5 +13,9 @@ class RoleConfiguration : IEntityTypeConfiguration<Role>
         builder.Property(x => x.Name)
             .IsRequired()
             .HasMaxLength(100);
+
+        builder.Property(c => c.CreatedAt)
+            .HasDefaultValueSql("GETUTCDATE()")
+            .IsRequired();  
     }
 }

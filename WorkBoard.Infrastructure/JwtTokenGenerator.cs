@@ -34,7 +34,7 @@ public sealed class JwtTokenGenerator : IJwtTokenGenerator
             new (JwtRegisteredClaimNames.Email, user.Email),
             new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
-        claims.AddRange(user.Roles.Select(r => new Claim(ClaimTypes.Role, r.Name)));
+        claims.AddRange(user.Roles.Select(r => new Claim(ClaimTypes.Role, r.Role.Name)));
 
         var token = new JwtSecurityToken(
             issuer: _settings.Issuer,

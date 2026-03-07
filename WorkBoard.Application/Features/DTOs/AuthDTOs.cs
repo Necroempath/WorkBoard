@@ -6,7 +6,7 @@ public class AuthResponseDto
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Jwt { get; set; } = string.Empty;
-    public IReadOnlySet<string> Roles { get; set; } = new HashSet<string>();
+    public IReadOnlyCollection<string> Roles { get; set; } = new HashSet<string>();
 }
 
 public class RegisterRequest

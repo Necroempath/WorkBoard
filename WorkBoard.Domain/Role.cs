@@ -1,20 +1,30 @@
 ﻿namespace WorkBoard.Domain;
 
-public sealed class Role : IEquatable<Role>
+public sealed class Role : BaseEntity
 {
-    private readonly List<User> _users = new();
-    public string Name { get; }
-    public IReadOnlyCollection<User> Users => _users;
+    private readonly List<UserRole> _userRoles = new();
+    public string Name { get; private set; } = string.Empty;
+    public IReadOnlyCollection<UserRole> UsersRoles => _userRoles;
+
+    public const string User = "User";
+    public const string Manager = "Manager";
+    public const string Admin = "Admin";
 
     public Role(string name)
+    {
+        SetName(name);
+    }
+
+    public void Rename(string name)
+    {
+        SetName(name);
+    }
+
+    private void SetName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Role name cannot be empty");
 
         Name = name.Trim();
     }
-
-    public bool Equals(Role? other) => other != null && Name.Equals(other.Name, StringComparison.OrdinalIgnoreCase);
-    public override bool Equals(object? obj) => Equals(obj as Role);
-    public override int GetHashCode() => Name.GetHashCode(StringComparison.OrdinalIgnoreCase);
 }

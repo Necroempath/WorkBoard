@@ -13,6 +13,8 @@ sealed class MappingProfile : Profile
         CreateMap<CreateWorkspaceRequest, Workspace>();
 
         // Auth
-        CreateMap<User, AuthResponseDto>();
+        CreateMap<User, AuthResponseDto>()
+            .ForMember(dest => dest.Roles, 
+            opt => opt.MapFrom(src => src.Roles.Select(r => r.Role.Name)));
     }
 }

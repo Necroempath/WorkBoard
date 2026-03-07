@@ -27,8 +27,5 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(c => c.CreatedAt)
             .HasDefaultValueSql("GETUTCDATE()")
             .IsRequired();
-
-        builder.HasMany(u => u.Roles)
-            .WithMany(r => r.Users);
     }
 }

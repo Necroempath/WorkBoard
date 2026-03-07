@@ -8,14 +8,16 @@ namespace WorkBoard.Application.Features.Auth;
 
 public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthResponseDto>
 {
-    private readonly IUserRepository _repository;
+    private readonly IUserRepository _userRepository;
+    private readonly IRoleRepository _roleRepository;
     private readonly IPasswordHasher _hasher;
     private readonly IJwtTokenGenerator _generator;
     private readonly IMapper _mapper;
 
-    public RegisterCommandHandler(IUserRepository repository, IPasswordHasher hasher, IJwtTokenGenerator generator, IMapper mapper)
+    public RegisterCommandHandler(IUserRepository userRepository, IRoleRepository roleRepository, IPasswordHasher hasher, IJwtTokenGenerator generator, IMapper mapper)
     {
-        _repository = repository;
+        _userRepository = userRepository;
+        _roleRepository = roleRepository;
         _hasher = hasher;
         _generator = generator;
         _mapper = mapper;
@@ -27,7 +29,12 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthRespo
 
         User user = new(command.Request.Name, command.Request.Email, hash);
 
-        await _repository.AddAsync(user, token);
+        var userRole = await _roleRepository.GetByNameAsync(Role.User, token) 
+            ?? throw new InvalidOperationException($"No role {Role.User} found in storage to make initial role assigning");
+
+        user.AssignRole(userRole);
+
+        await _userRepository.AddAsync(user, token);
 
         var jwt = _generator.Generate(user);
 

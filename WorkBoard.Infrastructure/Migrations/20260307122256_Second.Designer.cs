@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorkBoard.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using WorkBoard.Infrastructure.Persistence;
 namespace WorkBoard.Infrastructure.Migrations
 {
     [DbContext(typeof(WorkBoardDbContext))]
-    partial class WorkBoardDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260307122256_Second")]
+    partial class Second
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace WorkBoard.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.Property<string>("RolesName")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RolesName", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("RoleUser");
+                });
 
             modelBuilder.Entity("WorkBoard.Domain.Column", b =>
                 {
@@ -117,24 +135,11 @@ namespace WorkBoard.Infrastructure.Migrations
 
             modelBuilder.Entity("WorkBoard.Domain.Role", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTimeOffset?>("UpdatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("Id");
+                    b.HasKey("Name");
 
                     b.ToTable("Roles");
                 });
@@ -173,21 +178,6 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.UserRole", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("UserRole");
-                });
-
             modelBuilder.Entity("WorkBoard.Domain.Workspace", b =>
                 {
                     b.Property<Guid>("Id")
@@ -213,6 +203,21 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Workspaces", (string)null);
+                });
+
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.HasOne("WorkBoard.Domain.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorkBoard.Domain.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WorkBoard.Domain.Column", b =>
@@ -242,25 +247,6 @@ namespace WorkBoard.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.UserRole", b =>
-                {
-                    b.HasOne("WorkBoard.Domain.Role", "Role")
-                        .WithMany("UsersRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WorkBoard.Domain.User", "User")
-                        .WithMany("Roles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("WorkBoard.Domain.Column", b =>
                 {
                     b.Navigation("Issues");
@@ -269,16 +255,6 @@ namespace WorkBoard.Infrastructure.Migrations
             modelBuilder.Entity("WorkBoard.Domain.Project", b =>
                 {
                     b.Navigation("Columns");
-                });
-
-            modelBuilder.Entity("WorkBoard.Domain.Role", b =>
-                {
-                    b.Navigation("UsersRoles");
-                });
-
-            modelBuilder.Entity("WorkBoard.Domain.User", b =>
-                {
-                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("WorkBoard.Domain.Workspace", b =>

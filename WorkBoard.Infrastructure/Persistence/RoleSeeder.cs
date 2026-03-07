@@ -24,11 +24,15 @@ public static class RoleSeeder
 
         await context.SaveChangesAsync();
 
-        if (!context.Users.Any())
+        if (!context.Users.Any(u => u.Roles.Any(r => r.Role.Name == "Admin")))
         {
             var passwordHash = BCrypt.Net.BCrypt.HashPassword("Admin");
 
             var admin = new User("Admin", "admin@mail.com", passwordHash);
+
+            var adminRole = await context.Roles.FirstAsync(r => r.Name == "Admin");
+
+            admin.AssignRole(adminRole);
 
             context.Users.Add(admin);
 
