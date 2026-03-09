@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using WorkBoard.Application.DTOs;
+using WorkBoard.Application.Abstractions.Repositories;
+using WorkBoard.Application.Features.Authentication.DTOs;
 using WorkBoard.Application.Interfaces;
 using WorkBoard.Domain;
 

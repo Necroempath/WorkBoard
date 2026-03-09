@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WorkBoard.Application.Interfaces;
+using WorkBoard.Application.Abstractions.Repositories;
 using WorkBoard.Domain;
 
-namespace WorkBoard.Infrastructure.Persistence;
+namespace WorkBoard.Infrastructure.Persistence.Repositories;
 
 public sealed class EfRoleRepository : IRoleRepository
 {

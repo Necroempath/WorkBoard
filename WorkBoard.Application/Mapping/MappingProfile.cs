@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using WorkBoard.Application.DTOs;
+using WorkBoard.Application.Features.Authentication.DTOs;
+using WorkBoard.Application.Features.Workspaces.DTOs;
 using WorkBoard.Domain;
 
 namespace WorkBoard.Application.Mapping;

@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace WorkBoard.Domain;
+﻿namespace WorkBoard.Domain;
 
 public sealed class User : BaseEntity
 {

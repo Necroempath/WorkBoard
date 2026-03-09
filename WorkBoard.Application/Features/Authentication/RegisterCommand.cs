@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using WorkBoard.Application.DTOs;
+using WorkBoard.Application.Features.Authentication.DTOs;
 
 namespace WorkBoard.Application.Features.Authentication;
 

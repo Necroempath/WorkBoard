@@ -1,9 +1,9 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WorkBoard.Application.DTOs;
 using WorkBoard.Application.Features.Workspaces.CreateWorkspace;
+using WorkBoard.Application.Features.Workspaces.DTOs;
 using WorkBoard.Application.Features.Workspaces.Queries;
-using WorkBoard.Domain;
 
 namespace WorkBoard.API.Controllers;
 
@@ -19,13 +19,14 @@ public sealed class WorkspaceControllers : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Workspace>>> GetAll(CancellationToken token)
+    public async Task<ActionResult<IEnumerable<WorkspaceResponseDto>>> GetAll(CancellationToken token)
     {
         return Ok(await _mediator.Send(new GetAllWorkspacesQuery(), token));
     }
 
     [HttpPost]
-    public async Task<ActionResult<Workspace>> Create([FromBody]CreateWorkspaceRequest dto, CancellationToken token)
+    [Authorize]
+    public async Task<ActionResult<WorkspaceResponseDto>> Create([FromBody]CreateWorkspaceRequest dto, CancellationToken token)
     {
         return Ok(await _mediator.Send(new CreateWorkspaceCommand(dto), token));
     }

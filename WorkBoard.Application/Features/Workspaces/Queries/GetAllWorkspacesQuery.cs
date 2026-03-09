@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using WorkBoard.Application.DTOs;
+using WorkBoard.Application.Features.Workspaces.DTOs;
 
 namespace WorkBoard.Application.Features.Workspaces.Queries;
 

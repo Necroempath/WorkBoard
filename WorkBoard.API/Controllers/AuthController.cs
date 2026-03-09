@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WorkBoard.Application.DTOs;
 using WorkBoard.Application.Features.Authentication;
+using WorkBoard.Application.Features.Authentication.DTOs;
 
 namespace WorkBoard.API.Controllers;
 

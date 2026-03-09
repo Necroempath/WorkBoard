@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkBoard.Application.Interfaces;
 using WorkBoard.Infrastructure.Persistence;
-using WorkBoard.Infrastructure;
+using WorkBoard.Application.Abstractions.Repositories;
+using WorkBoard.Infrastructure.Persistence.Repositories;
+using WorkBoard.Infrastructure.Implementations;
 
 namespace WorkBoard.API.Extensions;
 
@@ -14,7 +16,6 @@ public static class InfrastructureExtensions
 
         services.AddScoped<IWorkspaceRepository, EfWorkspaceRepository>();
         services.AddScoped<IUserRepository, EfUserRepository>();
-        services.AddScoped<IRoleRepository, EfRoleRepository>();
 
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();

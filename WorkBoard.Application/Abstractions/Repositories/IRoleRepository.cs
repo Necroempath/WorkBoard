@@ -1,6 +1,6 @@
 ﻿using WorkBoard.Domain;
 
-namespace WorkBoard.Application.Interfaces;
+namespace WorkBoard.Application.Abstractions.Repositories;
 
 public interface IRoleRepository
 {

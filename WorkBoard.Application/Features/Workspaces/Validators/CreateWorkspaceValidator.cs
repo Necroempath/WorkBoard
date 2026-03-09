@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using WorkBoard.Application.DTOs;
+using WorkBoard.Application.Features.Workspaces.DTOs;
 
 namespace WorkBoard.Application.Features.Workspaces.Validators;
 
-class CreateWorkspaceValidator : AbstractValidator<CreateWorkspaceRequest>
+public class CreateWorkspaceValidator : AbstractValidator<CreateWorkspaceRequest>
 {
     public CreateWorkspaceValidator()
     {

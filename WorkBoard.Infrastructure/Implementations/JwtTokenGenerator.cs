@@ -7,7 +7,7 @@ using WorkBoard.Application.Interfaces;
 using WorkBoard.Domain;
 using WorkBoard.Infrastructure.JwtToken;
 
-namespace WorkBoard.Infrastructure;
+namespace WorkBoard.Infrastructure.Implementations;
 
 public sealed class JwtTokenGenerator : IJwtTokenGenerator
 {

@@ -1,6 +1,6 @@
 ﻿using WorkBoard.Application.Interfaces;
 
-namespace WorkBoard.Infrastructure;
+namespace WorkBoard.Infrastructure.Implementations;
 
 public sealed class BCryptPasswordHasher : IPasswordHasher
 {
