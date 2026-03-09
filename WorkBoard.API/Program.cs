@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
+    .AddValidation()
     .AddAuthenticationServices(builder.Configuration)
     .AddSwaggerServices();
 

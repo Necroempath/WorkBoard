@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using WorkBoard.Application.Features.DTOs;
+using WorkBoard.Application.DTOs;
 using WorkBoard.Domain;
 
 namespace WorkBoard.Application.Mapping;

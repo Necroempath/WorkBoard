@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
-using WorkBoard.Application.Features.DTOs;
+using WorkBoard.Application.DTOs;
 using WorkBoard.Application.Interfaces;
 using WorkBoard.Domain;
 
-namespace WorkBoard.Application.Features.Auth;
+namespace WorkBoard.Application.Features.Authentication;
 
 public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthResponseDto>
 {

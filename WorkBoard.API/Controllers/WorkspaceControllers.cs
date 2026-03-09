@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WorkBoard.Application.Features.DTOs;
+using WorkBoard.Application.DTOs;
 using WorkBoard.Application.Features.Workspaces.CreateWorkspace;
 using WorkBoard.Application.Features.Workspaces.Queries;
 using WorkBoard.Domain;
