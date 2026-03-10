@@ -1,6 +1,5 @@
 
 using WorkBoard.API.Extensions;
-using WorkBoard.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +10,7 @@ builder.Services
     .AddInfrastructure(builder.Configuration)
     .AddValidation()
     .AddAuthenticationServices(builder.Configuration)
+    .AddApiServices()
     .AddSwaggerServices();
 
 var app = builder.Build();

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WorkBoard.Application.Features.Authentication;
-using WorkBoard.Application.Features.Authentication.DTOs;
+using WorkBoard.Application.Features.Authentication.Commands;
 
 namespace WorkBoard.API.Controllers;
 
@@ -20,5 +20,11 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<AuthResponseDto>> Register([FromBody]RegisterRequest request, CancellationToken token)
     {
         return Ok(await _mediator.Send(new RegisterCommand(request), token));
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<AuthResponseDto>> Login([FromBody] LoginRequest request, CancellationToken token)
+    {
+        return Ok(await _mediator.Send(new LoginCommand(request), token));
     }
 }

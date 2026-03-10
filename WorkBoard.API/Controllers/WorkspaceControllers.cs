@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WorkBoard.Application.Features.Workspaces;
 using WorkBoard.Application.Features.Workspaces.CreateWorkspace;
-using WorkBoard.Application.Features.Workspaces.DTOs;
 using WorkBoard.Application.Features.Workspaces.Queries;
 
 namespace WorkBoard.API.Controllers;
@@ -19,6 +19,7 @@ public sealed class WorkspaceControllers : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<WorkspaceResponseDto>>> GetAll(CancellationToken token)
     {
         return Ok(await _mediator.Send(new GetAllWorkspacesQuery(), token));

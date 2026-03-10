@@ -26,7 +26,7 @@ public static class RoleSeeder
 
         if (!context.Users.Any(u => u.Roles.Any(r => r.Role.Name == "Admin")))
         {
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword("Admin");
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword("Aa123!");
 
             var admin = new User("Admin", "admin@mail.com", passwordHash);
 

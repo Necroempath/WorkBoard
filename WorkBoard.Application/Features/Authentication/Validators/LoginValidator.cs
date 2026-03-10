@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using WorkBoard.Application.Features.Authentication.DTOs;
 
 namespace WorkBoard.Application.Features.Authentication.Validators;
 

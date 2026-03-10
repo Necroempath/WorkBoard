@@ -1,4 +1,4 @@
-﻿namespace WorkBoard.Application.Features.Workspaces.DTOs;
+﻿namespace WorkBoard.Application.Features.Workspaces;
 
 public sealed class WorkspaceResponseDto
 {

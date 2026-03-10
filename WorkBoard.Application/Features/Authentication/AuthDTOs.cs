@@ -1,4 +1,4 @@
-﻿namespace WorkBoard.Application.Features.Authentication.DTOs;
+﻿namespace WorkBoard.Application.Features.Authentication;
 
 public class AuthResponseDto
 {

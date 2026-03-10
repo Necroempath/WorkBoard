@@ -22,6 +22,11 @@ public sealed class Workspace : BaseEntity
         SetName(name);
     }
 
+    public void SetOwner(Guid ownerId)
+    {
+        SetOwnerId(ownerId);
+    }
+
     private void SetName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))

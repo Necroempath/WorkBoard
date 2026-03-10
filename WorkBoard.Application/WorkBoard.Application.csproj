@@ -18,4 +18,9 @@
 		<ProjectReference Include="..\WorkBoard.Domain\WorkBoard.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Common\Behaviors\" />
+	  <Folder Include="Common\Interfaces\" />
+	</ItemGroup>
+
 </Project>
