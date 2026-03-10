@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using WorkBoard.Application.Entities;
 using WorkBoard.Domain;
 
 namespace WorkBoard.Infrastructure.Persistence;
@@ -9,6 +10,7 @@ public sealed class WorkBoardDbContext : DbContext
     public DbSet<Workspace> Workspaces => Set<Workspace>();
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     public WorkBoardDbContext(DbContextOptions<WorkBoardDbContext> options) : base(options) { }
 

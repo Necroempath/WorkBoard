@@ -2,7 +2,7 @@
 
 namespace WorkBoard.API.Extensions;
 
-public static class SeederExtenions
+public static class SeederExtensions
 {
     public static async Task EnsureRoleSeededAsync(this WebApplication app)
     {
