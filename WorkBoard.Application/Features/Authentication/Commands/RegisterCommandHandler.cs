@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using WorkBoard.Application.Abstractions.Repositories;
-using WorkBoard.Application.Entities;
-using WorkBoard.Application.Interfaces;
+using WorkBoard.Application.Abstractions;
 using WorkBoard.Domain;
 
 namespace WorkBoard.Application.Features.Authentication.Commands;
@@ -12,18 +11,18 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthRespo
     private readonly IUserRepository _userRepository;
     private readonly IRoleRepository _roleRepository;
     private readonly IPasswordHasher _hasher;
-    private readonly IJwtTokenGenerator _generator;
-    private readonly IRefreshTokenRepository _refreshTokenRepository;
+    private readonly IRefreshTokenGenerator _refreshTokenGenerator;
+    private readonly IJwtTokenGenerator _jwtGenerator;
     private readonly IMapper _mapper;
 
-    public RegisterCommandHandler(IUserRepository userRepository, IRoleRepository roleRepository,
-        IPasswordHasher hasher, IJwtTokenGenerator generator, IRefreshTokenRepository refreshTokenRepository, IMapper mapper)
+    public RegisterCommandHandler(IUserRepository userRepository, IRoleRepository roleRepository, IPasswordHasher hasher,
+         IRefreshTokenGenerator refreshTokenGenerator, IJwtTokenGenerator jwtGenerator, IMapper mapper)
     {
         _userRepository = userRepository;
         _roleRepository = roleRepository;
         _hasher = hasher;
-        _refreshTokenRepository = refreshTokenRepository;
-        _generator = generator;
+        _jwtGenerator = jwtGenerator;
+        _refreshTokenGenerator = refreshTokenGenerator;
         _mapper = mapper;
     }
 
@@ -36,22 +35,12 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthRespo
         var userRole = await _roleRepository.GetByNameAsync(Role.User, ct) 
             ?? throw new InvalidOperationException($"No role {Role.User} found in storage to make initial role assigning");
 
-        RefreshToken refreshToken = new(new Guid().ToString("N"), user.Id, DateTime.UtcNow.AddDays(7));
-
-        user.AddToken(refreshToken.Token);
+        var refreshToken = _refreshTokenGenerator.Generate(user);
 
         user.AssignRole(userRole);
 
         await _userRepository.AddAsync(user, ct);
 
-        await _refreshTokenRepository.AddTokenAsync(refreshToken, ct);
-
-        var jwt = _generator.Generate(user);
-
-        var authResponseDto = _mapper.Map<AuthResponseDto>(user);
-
-        authResponseDto.Jwt = jwt;
-
-        return authResponseDto;
+        return AuthorizationHelper.SetUpTokens(user, _jwtGenerator, _refreshTokenGenerator, _mapper);
     }
 }

@@ -3,9 +3,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using WorkBoard.Application.Interfaces;
+using WorkBoard.Application.Abstractions;
 using WorkBoard.Domain;
-using WorkBoard.Infrastructure.JwtToken;
+using WorkBoard.Infrastructure.Contracts;
 
 namespace WorkBoard.Infrastructure.Implementations;
 

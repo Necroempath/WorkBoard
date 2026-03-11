@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using WorkBoard.Application.Abstractions.Repositories;
-using WorkBoard.Application.Interfaces;
+using WorkBoard.Application.Abstractions;
 
 namespace WorkBoard.Application.Features.Authentication.Commands;
 
@@ -9,14 +9,17 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDto
 {
     private readonly IUserRepository _repository;
     private readonly IPasswordHasher _hasher;
-    private readonly IJwtTokenGenerator _generator;
+    private readonly IJwtTokenGenerator _jwtGenerator;
+    private readonly IRefreshTokenGenerator _refreshTokenGenerator;
     private readonly IMapper _mapper;
 
-    public LoginCommandHandler(IUserRepository repository, IPasswordHasher hasher, IJwtTokenGenerator generator, IMapper mapper)
+    public LoginCommandHandler(IUserRepository repository, IPasswordHasher hasher, 
+        IRefreshTokenGenerator refreshTokenGenerator, IJwtTokenGenerator jwtGenerator, IMapper mapper)
     {
         _repository = repository;
         _hasher = hasher;
-        _generator = generator;
+        _jwtGenerator = jwtGenerator;
+        _refreshTokenGenerator = refreshTokenGenerator;
         _mapper = mapper;
     }
 
@@ -30,12 +33,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDto
         if (!_hasher.Verify(request.Request.Password, user.PasswordHash))
             throw new ArgumentException("Invalid email or password");
 
-        var jwt = _generator.Generate(user);
-
-        var authResponseDto = _mapper.Map<AuthResponseDto>(user);
-
-        authResponseDto.Jwt = jwt;
-
-        return authResponseDto;
+        return AuthorizationHelper.SetUpTokens(user, _jwtGenerator, _refreshTokenGenerator, _mapper);
     }
 }

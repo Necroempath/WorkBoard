@@ -2,7 +2,7 @@
 
 namespace WorkBoard.Application.Abstractions;
 
-public interface IJwtTokenGenerator
+public interface IRefreshTokenGenerator
 {
-    string Generate(User user);
+    RefreshToken Generate(User user);
 }

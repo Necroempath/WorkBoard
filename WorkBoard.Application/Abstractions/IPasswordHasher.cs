@@ -1,4 +1,4 @@
-﻿namespace WorkBoard.Application.Interfaces;
+﻿namespace WorkBoard.Application.Abstractions;
 
 public interface IPasswordHasher
 {

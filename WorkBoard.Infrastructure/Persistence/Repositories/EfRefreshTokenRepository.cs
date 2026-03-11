@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkBoard.Application.Abstractions.Repositories;
-using WorkBoard.Application.Entities;
+using WorkBoard.Domain;
 
 namespace WorkBoard.Infrastructure.Persistence.Repositories;
 
@@ -27,13 +27,17 @@ public sealed class EfRefreshTokenRepository : IRefreshTokenRepository
         return token;
     }
 
-    public async Task DeleteTokenAsync(string token, CancellationToken ct)
+    public async Task<bool> DeleteTokenAsync(string token, CancellationToken ct)
     {
-        var refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == token)
-            ?? throw new ArgumentException($"Refresh Token by token {token} not found");
+        var refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == token);
+
+        if (refreshToken is null)
+            return false;
 
         _context.RefreshTokens.Remove(refreshToken);
 
         await _context.SaveChangesAsync();
+
+        return true;
     }
 }

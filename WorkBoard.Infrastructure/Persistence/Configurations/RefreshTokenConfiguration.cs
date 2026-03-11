@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using WorkBoard.Application.Entities;
+using WorkBoard.Domain;
 
 namespace WorkBoard.Infrastructure.Persistence.Configurations;
 

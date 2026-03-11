@@ -1,6 +1,4 @@
-﻿using WorkBoard.Domain;
-
-namespace WorkBoard.Application.Entities;
+﻿namespace WorkBoard.Domain;
 
 public sealed class RefreshToken
 {
@@ -13,11 +11,14 @@ public sealed class RefreshToken
 
     public RefreshToken(string token, Guid userId, DateTimeOffset expiresAt)
     {
+        if (string.IsNullOrWhiteSpace(token))
+            throw new ArgumentException("Refresh token cannot be empty");
+
         if (userId == Guid.Empty)
-            throw new InvalidOperationException("User Id can not be empty");
+            throw new ArgumentException("User Id can not be empty");
 
         if (expiresAt <= DateTime.UtcNow)
-            throw new InvalidOperationException("Expire date must be in the future");
+            throw new ArgumentException("Expire date must be in the future");
 
         Token = token;
         UserId = userId;

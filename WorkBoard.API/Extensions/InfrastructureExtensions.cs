@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WorkBoard.Application.Interfaces;
+using WorkBoard.Application.Abstractions;
 using WorkBoard.Infrastructure.Persistence;
 using WorkBoard.Application.Abstractions.Repositories;
 using WorkBoard.Infrastructure.Persistence.Repositories;

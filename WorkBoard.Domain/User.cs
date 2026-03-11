@@ -3,13 +3,13 @@
 public sealed class User : BaseEntity
 {
     private readonly List<UserRole> _roles = new();
-    private readonly List<string> _refreshTokens = new();
+    private readonly List<RefreshToken> _refreshTokens = new();
     public string Name { get; private set; } = string.Empty;
     public string Email { get; private set; } = string.Empty;
     public string PasswordHash { get; private set; } = string.Empty;
 
     public IReadOnlyCollection<UserRole> Roles => _roles;
-    public IReadOnlyCollection<string> RefreshTokens => _refreshTokens;
+    public IReadOnlyCollection<RefreshToken> RefreshTokens => _refreshTokens;
 
 
     private User() { }
@@ -36,10 +36,11 @@ public sealed class User : BaseEntity
         SetPasswordHash(passwordHash);
     }
 
-    public void AddToken(string token)
+    public void AddToken(RefreshToken token)
     {
-        AddRefreshToken(token);
+        _refreshTokens.Add(token);
     }
+
     public void AssignRole(Role role)
     {
         if (HasRole(role.Name))
@@ -95,13 +96,5 @@ public sealed class User : BaseEntity
             throw new ArgumentException("Password hash cannot be empty");
 
         PasswordHash = passwordHash;
-    }
-
-    private void AddRefreshToken(string refreshToken)
-    {
-        if (string.IsNullOrWhiteSpace(refreshToken))
-            throw new ArgumentException("Refresh token cannot be empty");
-
-        _refreshTokens.Add(refreshToken);
     }
 }
