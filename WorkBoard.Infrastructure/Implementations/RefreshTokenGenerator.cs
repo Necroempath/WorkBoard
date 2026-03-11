@@ -16,9 +16,8 @@ public sealed class RefreshTokenGenerator : IRefreshTokenGenerator
 
     public RefreshToken Generate(User user)
     {
-        var token = new Guid().ToString("N");
         var expiresAt = DateTime.UtcNow.AddDays(_settings.ExpirationDays);
 
-        return new(token, user.Id, expiresAt);
+        return new(user.Id, expiresAt);
     }
 }

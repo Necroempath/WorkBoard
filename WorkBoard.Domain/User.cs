@@ -2,13 +2,14 @@
 
 public sealed class User : BaseEntity
 {
-    private readonly List<UserRole> _roles = new();
-    private readonly List<RefreshToken> _refreshTokens = new();
     public string Name { get; private set; } = string.Empty;
     public string Email { get; private set; } = string.Empty;
     public string PasswordHash { get; private set; } = string.Empty;
 
+    private readonly List<UserRole> _roles = new();
     public IReadOnlyCollection<UserRole> Roles => _roles;
+
+    private readonly List<RefreshToken> _refreshTokens = new();
     public IReadOnlyCollection<RefreshToken> RefreshTokens => _refreshTokens;
 
 
@@ -34,11 +35,6 @@ public sealed class User : BaseEntity
     public void UpdatePasswordHash(string passwordHash)
     {
         SetPasswordHash(passwordHash);
-    }
-
-    public void AddToken(RefreshToken token)
-    {
-        _refreshTokens.Add(token);
     }
 
     public void AssignRole(Role role)

@@ -6,17 +6,15 @@ public sealed class Issue : BaseEntity
     public string Title { get; private set; } = string.Empty;
     public IssuePriority Priority { get; set; } = IssuePriority.Medium;
     public string? Description { get; private set; }
-    public Guid ProjectId { get; private set; }
     public Guid ColumnId { get; private set; }
     public int Order { get; private set; }
 
     private Issue() { }
 
-    internal Issue(string title, Guid projectId, Guid columnId, int order, string? description = null)
+    internal Issue(string title, Guid columnId, int order, string? description = null)
     {
         SetTitle(title);
         SetDescription(description);
-        SetProjectId(projectId);
         SetColumnId(columnId);
         SetOrder(order);
     }
@@ -66,13 +64,5 @@ public sealed class Issue : BaseEntity
         Description = string.IsNullOrWhiteSpace(description) 
             ? null 
             : description;
-    }
-
-    private void SetProjectId(Guid projectId)
-    {
-        if (projectId == Guid.Empty)
-            throw new ArgumentException("ProjectId cannot be empty");
-
-        ProjectId = projectId;
     }
 }

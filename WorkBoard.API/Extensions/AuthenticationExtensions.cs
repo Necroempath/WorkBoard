@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using WorkBoard.Infrastructure.JwtToken;
+using WorkBoard.Infrastructure.Contracts;
 
 namespace WorkBoard.API.Extensions;
 
@@ -9,12 +9,15 @@ public static class AuthenticationExtensions
 {
     public static IServiceCollection AddAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var jwtSettings = configuration
-            .GetSection("JwtSettings")
-            .Get<JwtSettings>();
-
         services.Configure<JwtSettings>(
-            configuration.GetSection("JwtSettings"));
+            configuration.GetSection(JwtSettings.SectionName));
+
+        services.Configure<RefreshTokenSettings>(
+            configuration.GetSection(RefreshTokenSettings.SectionName));
+
+        var jwtSettings = configuration
+            .GetSection(JwtSettings.SectionName)
+            .Get<JwtSettings>();
 
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

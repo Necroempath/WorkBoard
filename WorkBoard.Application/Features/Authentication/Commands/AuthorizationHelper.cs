@@ -1,22 +1,25 @@
 ﻿using AutoMapper;
 using WorkBoard.Application.Abstractions;
+using WorkBoard.Application.Abstractions.Repositories;
 using WorkBoard.Domain;
 
 namespace WorkBoard.Application.Features.Authentication.Commands;
 
 public sealed class AuthorizationHelper
 {
-    public static AuthResponseDto SetUpTokens(User user, IJwtTokenGenerator jwtTokenGenerator, IRefreshTokenGenerator refreshTokenGenerator, IMapper mapper)
+    public static AuthResponseDto SetUpTokens(User user, IRefreshTokenRepository refreshTokenRepository, IJwtTokenGenerator jwtTokenGenerator, 
+        IRefreshTokenGenerator refreshTokenGenerator, IMapper mapper, CancellationToken ct)
     {
         var refreshToken = refreshTokenGenerator.Generate(user);
 
-        var jwt = jwtTokenGenerator.Generate(user);
+        refreshTokenRepository.AddTokenAsync(refreshToken, ct);
 
-        user.AddToken(refreshToken);
+        var jwt = jwtTokenGenerator.Generate(user);
 
         var authResponseDto = mapper.Map<AuthResponseDto>(user);
 
         authResponseDto.Jwt = jwt;
+        authResponseDto.RefreshToken = refreshToken.Token;
 
         return authResponseDto;
     }

@@ -33,7 +33,7 @@ public sealed class Column : BaseEntity
 
     public Issue AddIssue(string title, string? description)
     {
-        var issue = new Issue(title, ProjectId, Id, _issues.Count, description);
+        var issue = new Issue(title, Id, _issues.Count, description);
 
         _issues.Add(issue);
         return issue;

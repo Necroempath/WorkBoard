@@ -13,7 +13,7 @@ public sealed class EfRefreshTokenRepository : IRefreshTokenRepository
         _context = context;
     }
 
-    public async Task<RefreshToken?> GetByTokenAsync(string token, CancellationToken ct)
+    public async Task<RefreshToken?> GetByTokenAsync(Guid token, CancellationToken ct)
     {
         return await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == token);
     }
@@ -27,7 +27,7 @@ public sealed class EfRefreshTokenRepository : IRefreshTokenRepository
         return token;
     }
 
-    public async Task<bool> DeleteTokenAsync(string token, CancellationToken ct)
+    public async Task<bool> DeleteTokenAsync(Guid token, CancellationToken ct)
     {
         var refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == token);
 

@@ -1,4 +1,4 @@
-﻿using WorkBoard.Application.Interfaces;
+﻿using WorkBoard.Application.Abstractions;
 
 namespace WorkBoard.Infrastructure.Implementations;
 

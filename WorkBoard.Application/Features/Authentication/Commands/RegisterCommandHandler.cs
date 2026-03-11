@@ -10,16 +10,18 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthRespo
 {
     private readonly IUserRepository _userRepository;
     private readonly IRoleRepository _roleRepository;
+    private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly IPasswordHasher _hasher;
     private readonly IRefreshTokenGenerator _refreshTokenGenerator;
     private readonly IJwtTokenGenerator _jwtGenerator;
     private readonly IMapper _mapper;
 
-    public RegisterCommandHandler(IUserRepository userRepository, IRoleRepository roleRepository, IPasswordHasher hasher,
-         IRefreshTokenGenerator refreshTokenGenerator, IJwtTokenGenerator jwtGenerator, IMapper mapper)
+    public RegisterCommandHandler(IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository,
+        IPasswordHasher hasher, IRefreshTokenGenerator refreshTokenGenerator, IJwtTokenGenerator jwtGenerator, IMapper mapper)
     {
         _userRepository = userRepository;
         _roleRepository = roleRepository;
+        _refreshTokenRepository = refreshTokenRepository;
         _hasher = hasher;
         _jwtGenerator = jwtGenerator;
         _refreshTokenGenerator = refreshTokenGenerator;
@@ -28,19 +30,22 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthRespo
 
     public async Task<AuthResponseDto> Handle(RegisterCommand command, CancellationToken ct)
     {
+        var user = await _userRepository.GetByEmailAsync(command.Request.Email, ct);
+
+        if (user is not null)
+            throw new InvalidOperationException($"User by given email {command.Request.Email} already exists");
+
         var hash = _hasher.Hash(command.Request.Password);
 
-        User user = new(command.Request.Name, command.Request.Email, hash);
+        User newUser = new(command.Request.Name, command.Request.Email, hash);
 
         var userRole = await _roleRepository.GetByNameAsync(Role.User, ct) 
             ?? throw new InvalidOperationException($"No role {Role.User} found in storage to make initial role assigning");
 
-        var refreshToken = _refreshTokenGenerator.Generate(user);
+        newUser.AssignRole(userRole);
 
-        user.AssignRole(userRole);
+        await _userRepository.AddAsync(newUser, ct);
 
-        await _userRepository.AddAsync(user, ct);
-
-        return AuthorizationHelper.SetUpTokens(user, _jwtGenerator, _refreshTokenGenerator, _mapper);
+        return AuthorizationHelper.SetUpTokens(newUser, _refreshTokenRepository, _jwtGenerator, _refreshTokenGenerator, _mapper, ct);
     }
 }

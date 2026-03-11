@@ -23,8 +23,14 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<AuthResponseDto>> Login([FromBody] LoginRequest request, CancellationToken token)
+    public async Task<ActionResult<AuthResponseDto>> Login([FromBody]LoginRequest request, CancellationToken token)
     {
         return Ok(await _mediator.Send(new LoginCommand(request), token));
+    }
+
+    [HttpPost("refresh")]
+    public async Task<ActionResult<AuthResponseDto>> Refresh([FromBody]RefreshTokenRequest request, CancellationToken token)
+    {
+        return Ok(await _mediator.Send(new RefreshTokenCommand(request), token));
     }
 }
