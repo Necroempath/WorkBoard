@@ -1,4 +1,4 @@
-﻿namespace WorkBoard.Domain;
+﻿namespace WorkBoard.Domain.Entities;
 
 public sealed class User : BaseEntity
 {
@@ -8,6 +8,9 @@ public sealed class User : BaseEntity
 
     private readonly List<UserRole> _roles = new();
     public IReadOnlyCollection<UserRole> Roles => _roles;
+
+    private readonly List<WorkspaceMembership> _memberships = new();
+    public IReadOnlyCollection<WorkspaceMembership> Memberships => _memberships;
 
     private readonly List<RefreshToken> _refreshTokens = new();
     public IReadOnlyCollection<RefreshToken> RefreshTokens => _refreshTokens;

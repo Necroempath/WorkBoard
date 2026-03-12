@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkBoard.Domain;
+using WorkBoard.Domain.Entities;
 
 namespace WorkBoard.Infrastructure.Persistence;
 

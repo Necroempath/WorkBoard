@@ -1,4 +1,4 @@
-﻿using WorkBoard.Domain;
+﻿using WorkBoard.Domain.Entities;
 
 namespace WorkBoard.Application.Abstractions;
 

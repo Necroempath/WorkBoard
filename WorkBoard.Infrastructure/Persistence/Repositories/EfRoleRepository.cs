@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkBoard.Application.Abstractions.Repositories;
-using WorkBoard.Domain;
+using WorkBoard.Domain.Entities;
 
 namespace WorkBoard.Infrastructure.Persistence.Repositories;
 
@@ -16,18 +16,18 @@ public sealed class EfRoleRepository : IRoleRepository
     public async Task<Role> AddAsync(Role role, CancellationToken token)
     {
         await _context.Roles.AddAsync(role, token);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(token);
 
         return role;
     }
 
     public async Task<Role?> GetByIdAsync(Guid id, CancellationToken token)
     {
-        return await _context.Roles.FirstOrDefaultAsync(r => r.Id == id);
+        return await _context.Roles.FirstOrDefaultAsync(r => r.Id == id, token);
     }
 
     public async Task<Role?> GetByNameAsync(string roleName, CancellationToken token)
     {
-        return await _context.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
+        return await _context.Roles.FirstOrDefaultAsync(r => r.Name == roleName, token);
     }
 }

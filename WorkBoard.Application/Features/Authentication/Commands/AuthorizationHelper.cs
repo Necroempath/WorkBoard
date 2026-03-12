@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using WorkBoard.Application.Abstractions;
 using WorkBoard.Application.Abstractions.Repositories;
-using WorkBoard.Domain;
+using WorkBoard.Domain.Entities;
 
 namespace WorkBoard.Application.Features.Authentication.Commands;
 

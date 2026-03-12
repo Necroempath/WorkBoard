@@ -1,4 +1,4 @@
-﻿namespace WorkBoard.Domain;
+﻿namespace WorkBoard.Domain.Enums;
 
 public enum IssuePriority
 {

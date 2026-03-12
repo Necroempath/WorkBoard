@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using WorkBoard.Application.Abstractions.Repositories;
 using WorkBoard.Application.Abstractions;
-using WorkBoard.Domain;
+using WorkBoard.Domain.Entities;
 
 namespace WorkBoard.Application.Features.Authentication.Commands;
 
@@ -44,7 +44,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
         refreshToken.Revoke();
         refreshToken.SetReplaceToken(newRefreshToken.Id);
 
-       await _refreshTokenRepository.Save();
+       await _refreshTokenRepository.Save(ct);
 
         return new()
         {

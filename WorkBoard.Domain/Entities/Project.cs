@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 
-namespace WorkBoard.Domain;
+namespace WorkBoard.Domain.Entities;
 
 public sealed class Project : BaseEntity
 {

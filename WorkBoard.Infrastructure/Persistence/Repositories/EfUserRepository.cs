@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkBoard.Application.Abstractions.Repositories;
-using WorkBoard.Domain;
+using WorkBoard.Domain.Entities;
 
 namespace WorkBoard.Infrastructure.Persistence.Repositories;
 
@@ -26,7 +26,7 @@ public sealed class EfUserRepository : IUserRepository
         return await _context.Users
             .Include(u => u.Roles)
             .ThenInclude(ur => ur.Role)
-            .FirstOrDefaultAsync(u => u.Email == email);
+            .FirstOrDefaultAsync(u => u.Email == email, token);
     }
 
     public async Task<User?> GetByIdAsync(Guid id, CancellationToken token)
@@ -34,6 +34,6 @@ public sealed class EfUserRepository : IUserRepository
         return await _context.Users
             .Include(u => u.Roles)
             .ThenInclude(ur => ur.Role)
-            .FirstOrDefaultAsync(u => u.Id == id);
+            .FirstOrDefaultAsync(u => u.Id == id, token);
     }
 }

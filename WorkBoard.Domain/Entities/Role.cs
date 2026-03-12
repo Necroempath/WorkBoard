@@ -1,4 +1,4 @@
-﻿namespace WorkBoard.Domain;
+﻿namespace WorkBoard.Domain.Entities;
 
 public sealed class Role : BaseEntity
 {

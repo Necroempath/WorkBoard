@@ -1,5 +1,6 @@
-﻿
-namespace WorkBoard.Domain;
+﻿using WorkBoard.Domain.Enums;
+
+namespace WorkBoard.Domain.Entities;
 
 public sealed class Issue : BaseEntity
 {

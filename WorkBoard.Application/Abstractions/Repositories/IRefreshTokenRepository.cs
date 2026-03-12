@@ -1,4 +1,4 @@
-﻿using WorkBoard.Domain;
+﻿using WorkBoard.Domain.Entities;
 
 namespace WorkBoard.Application.Abstractions.Repositories;
 
@@ -8,5 +8,5 @@ public interface IRefreshTokenRepository
     Task<RefreshToken?> GetByTokenAsync(string token, CancellationToken ct);
     Task<RefreshToken> AddTokenAsync(RefreshToken token, CancellationToken ct);
     Task<bool> DeleteTokenAsync(Guid id, CancellationToken ct);
-    Task Save();
+    Task Save(CancellationToken ct);
 }

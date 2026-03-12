@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WorkBoard.Application.Abstractions;
-using WorkBoard.Domain;
+using WorkBoard.Domain.Entities;
 using WorkBoard.Infrastructure.Contracts;
 
 namespace WorkBoard.Infrastructure.Implementations;

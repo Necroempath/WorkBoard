@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using WorkBoard.Application.Features.Authentication;
 using WorkBoard.Application.Features.Workspaces;
-using WorkBoard.Domain;
+using WorkBoard.Domain.Entities;
 
 namespace WorkBoard.Application.Mapping;
 
