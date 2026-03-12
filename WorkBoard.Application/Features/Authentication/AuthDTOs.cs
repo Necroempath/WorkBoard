@@ -6,13 +6,14 @@ public sealed class AuthResponseDto
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Jwt { get; set; } = string.Empty;
-    public Guid RefreshToken { get; set; }
+    public string RefreshToken { get; set; } = string.Empty;
     public IReadOnlyCollection<string> Roles { get; set; } = new List<string>();
 }
 
 public sealed class RefreshResponseDto
 {
-
+    public string RefreshToken { get; set; } = string.Empty;
+    public string AccessToken { get; set; } = string.Empty;
 }
 
 public sealed class RegisterRequest
@@ -31,8 +32,5 @@ public sealed class LoginRequest
 
 public sealed class RefreshTokenRequest
 {
-    public Guid Token { get; set; }
-    public Guid UserId { get; set; }
-    public DateTimeOffset ExpiresAt { get; set; }
-    public DateTimeOffset? RevokedAt { get; set; }
+    public string Token { get; set; } = string.Empty;
 }

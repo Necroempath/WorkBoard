@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 using WorkBoard.Application.Abstractions.Repositories;
 using WorkBoard.Domain;
 
@@ -13,9 +15,17 @@ public sealed class EfRefreshTokenRepository : IRefreshTokenRepository
         _context = context;
     }
 
-    public async Task<RefreshToken?> GetByTokenAsync(Guid token, CancellationToken ct)
+    public async Task<RefreshToken?> GetByIdAsync(Guid id, CancellationToken ct)
     {
-        return await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == token);
+        return await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Id == id);
+    }
+
+    public async Task<RefreshToken?> GetByTokenAsync(string token, CancellationToken ct)
+    {
+        var hash = Convert.ToHexString(
+            SHA256.HashData(Encoding.UTF8.GetBytes(token)));
+
+        return await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.TokenHash == hash);
     }
 
     public async Task<RefreshToken> AddTokenAsync(RefreshToken token, CancellationToken ct)
@@ -27,9 +37,9 @@ public sealed class EfRefreshTokenRepository : IRefreshTokenRepository
         return token;
     }
 
-    public async Task<bool> DeleteTokenAsync(Guid token, CancellationToken ct)
+    public async Task<bool> DeleteTokenAsync(Guid id, CancellationToken ct)
     {
-        var refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == token);
+        var refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Id == id);
 
         if (refreshToken is null)
             return false;
@@ -39,5 +49,10 @@ public sealed class EfRefreshTokenRepository : IRefreshTokenRepository
         await _context.SaveChangesAsync();
 
         return true;
+    }
+
+    public async Task Save()
+    {
+        await _context.SaveChangesAsync();
     }
 }

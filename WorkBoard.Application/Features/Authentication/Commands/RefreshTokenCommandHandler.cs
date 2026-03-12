@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using WorkBoard.Application.Abstractions.Repositories;
 using WorkBoard.Application.Abstractions;
+using WorkBoard.Domain;
 
 namespace WorkBoard.Application.Features.Authentication.Commands;
 
@@ -11,33 +11,45 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
     private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly IJwtTokenGenerator _jwtGenerator;
     private readonly IRefreshTokenGenerator _refreshTokenGenerator;
-    private readonly IMapper _mapper;
 
     public RefreshTokenCommandHandler(IUserRepository userRepository, IRefreshTokenRepository refreshTokenRepository,
-        IJwtTokenGenerator jwtGenerator, IRefreshTokenGenerator refreshTokenGenerator, IMapper mapper)
+        IJwtTokenGenerator jwtGenerator, IRefreshTokenGenerator refreshTokenGenerator)
     {
         _userRepository = userRepository;
         _refreshTokenRepository = refreshTokenRepository;
         _jwtGenerator = jwtGenerator;
         _refreshTokenGenerator = refreshTokenGenerator;
-        _mapper = mapper;
     }
 
     public async Task<RefreshResponseDto> Handle(RefreshTokenCommand command, CancellationToken ct)
     {
         var refreshToken = await _refreshTokenRepository.GetByTokenAsync(command.Request.Token, ct);
-        var user = await _userRepository.GetByIdAsync(command.Request.UserId, ct);
+
+        if (refreshToken is null || refreshToken.RevokedAt != null || refreshToken.ReplacedByTokenId != null)
+            throw new InvalidOperationException("Invalid Refresh Token");
+
+        var user = await _userRepository.GetByIdAsync(refreshToken.UserId, ct);
 
         if (user is null)
             throw new InvalidOperationException("Invalid Refresh Token");
 
+        (var token, var hash, var expiresAt) = _refreshTokenGenerator.Generate();
 
-        if (!user.RefreshTokens.Contains(command.Request.Token))
-            throw new InvalidOperationException("Invalid Refresh Token");
-        //Refresh token не сохраняется, посмотри в логин и регистер хендленры
-        var newRefreshToken = _refreshTokenGenerator.Generate(user);
+        RefreshToken newRefreshToken = new(hash, user.Id, expiresAt);
+
+        await _refreshTokenRepository.AddTokenAsync(newRefreshToken, ct);
+
         var jwt = _jwtGenerator.Generate(user);
 
-        return new();
+        refreshToken.Revoke();
+        refreshToken.SetReplaceToken(newRefreshToken.Id);
+
+       await _refreshTokenRepository.Save();
+
+        return new()
+        {
+            RefreshToken = token,
+            AccessToken = jwt
+        };
     }
 }

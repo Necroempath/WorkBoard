@@ -2,8 +2,9 @@
 
 public sealed class RefreshToken
 {
-    public Guid Token { get; } = Guid.NewGuid();
-    public DateTimeOffset ExpiresAt { get; }
+    public Guid Id { get; }
+    public string TokenHash { get; private set; } = string.Empty;
+    public DateTimeOffset ExpiresAt { get; private set; }
     public DateTimeOffset? RevokedAt { get; private set; }
     public Guid? ReplacedByTokenId { get; private set; }
     public Guid UserId { get; }
@@ -11,8 +12,10 @@ public sealed class RefreshToken
 
     private RefreshToken() { }
 
-    public RefreshToken(Guid userId, DateTimeOffset expiresAt)
+    public RefreshToken(string tokenHash, Guid userId, DateTimeOffset expiresAt)
     {
+        if (string.IsNullOrWhiteSpace(tokenHash))
+            throw new ArgumentException("Token can not be empty");
 
         if (userId == Guid.Empty)
             throw new ArgumentException("User Id can not be empty");
@@ -20,6 +23,7 @@ public sealed class RefreshToken
         if (expiresAt <= DateTimeOffset.UtcNow)
             throw new ArgumentException("Expire date must be in the future");
 
+        TokenHash = tokenHash;
         UserId = userId;
         ExpiresAt = expiresAt;
     }

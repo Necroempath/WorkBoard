@@ -11,15 +11,10 @@ class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
     {
         builder.ToTable("RefreshTokens");
 
-        builder.HasKey(x => x.Token);
-
-        builder.ToTable(t => t.HasCheckConstraint(
-            "CK_RefreshTokens_ExpireAt",
-            "ExpireAt > GETDATE()"
-        ));
+        builder.HasKey(x => x.Id);
 
         builder.HasOne(rt => rt.User)
-               .WithMany() 
+               .WithMany(u => u.RefreshTokens) 
                .HasForeignKey(rt => rt.UserId)
                .OnDelete(DeleteBehavior.Cascade);
     }

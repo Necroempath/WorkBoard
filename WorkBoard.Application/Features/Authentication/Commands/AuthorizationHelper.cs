@@ -10,7 +10,9 @@ public sealed class AuthorizationHelper
     public static AuthResponseDto SetUpTokens(User user, IRefreshTokenRepository refreshTokenRepository, IJwtTokenGenerator jwtTokenGenerator, 
         IRefreshTokenGenerator refreshTokenGenerator, IMapper mapper, CancellationToken ct)
     {
-        var refreshToken = refreshTokenGenerator.Generate(user);
+        (var token, var hash, var expiresAt) = refreshTokenGenerator.Generate();
+
+        RefreshToken refreshToken = new(hash, user.Id, expiresAt);
 
         refreshTokenRepository.AddTokenAsync(refreshToken, ct);
 
@@ -19,7 +21,7 @@ public sealed class AuthorizationHelper
         var authResponseDto = mapper.Map<AuthResponseDto>(user);
 
         authResponseDto.Jwt = jwt;
-        authResponseDto.RefreshToken = refreshToken.Token;
+        authResponseDto.RefreshToken = token;
 
         return authResponseDto;
     }

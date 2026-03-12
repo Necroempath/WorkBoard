@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
+using System.Security.Cryptography;
+using System.Text;
 using WorkBoard.Application.Abstractions;
 using WorkBoard.Domain;
 using WorkBoard.Infrastructure.Contracts;
@@ -14,10 +16,16 @@ public sealed class RefreshTokenGenerator : IRefreshTokenGenerator
         _settings = settings.Value;
     }
 
-    public RefreshToken Generate(User user)
+    public (string, string, DateTimeOffset) Generate()
     {
+        var token = Convert.ToBase64String(
+                RandomNumberGenerator.GetBytes(64));
+
+        var hash = Convert.ToHexString(
+            SHA256.HashData(Encoding.UTF8.GetBytes(token)));
+
         var expiresAt = DateTime.UtcNow.AddDays(_settings.ExpirationDays);
 
-        return new(user.Id, expiresAt);
-    }
+        return (token, hash, expiresAt);
+    }    
 }
