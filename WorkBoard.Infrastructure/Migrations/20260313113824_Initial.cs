@@ -85,12 +85,13 @@ namespace WorkBoard.Infrastructure.Migrations
                 name: "UserRole",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRole", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_UserRole", x => x.Id);
                     table.ForeignKey(
                         name: "FK_UserRole_Roles_RoleId",
                         column: x => x.RoleId,
@@ -121,6 +122,33 @@ namespace WorkBoard.Infrastructure.Migrations
                     table.PrimaryKey("PK_Project", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Project_Workspaces_WorkspaceId",
+                        column: x => x.WorkspaceId,
+                        principalTable: "Workspaces",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WorkspaceMemberships",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WorkspaceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
+                    JoinedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkspaceMemberships", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkspaceMemberships_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WorkspaceMemberships_Workspaces_WorkspaceId",
                         column: x => x.WorkspaceId,
                         principalTable: "Workspaces",
                         principalColumn: "Id",
@@ -199,6 +227,30 @@ namespace WorkBoard.Infrastructure.Migrations
                 name: "IX_UserRole_RoleId",
                 table: "UserRole",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRole_UserId",
+                table: "UserRole",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkspaceMemberships_UserId_WorkspaceId",
+                table: "WorkspaceMemberships",
+                columns: new[] { "UserId", "WorkspaceId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkspaceMemberships_WorkspaceId",
+                table: "WorkspaceMemberships",
+                column: "WorkspaceId",
+                unique: true,
+                filter: "[Role] = 0");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkspaceMemberships_WorkspaceId_UserId",
+                table: "WorkspaceMemberships",
+                columns: new[] { "WorkspaceId", "UserId" },
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -212,6 +264,9 @@ namespace WorkBoard.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserRole");
+
+            migrationBuilder.DropTable(
+                name: "WorkspaceMemberships");
 
             migrationBuilder.DropTable(
                 name: "Column");

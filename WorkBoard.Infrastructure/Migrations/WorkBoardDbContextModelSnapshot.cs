@@ -22,7 +22,7 @@ namespace WorkBoard.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WorkBoard.Domain.Column", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.Column", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -54,7 +54,7 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.ToTable("Column");
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.Issue", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.Issue", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -92,7 +92,7 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.ToTable("Issue");
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.Project", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.Project", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -121,7 +121,7 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.ToTable("Project");
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.RefreshToken", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.RefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -150,7 +150,7 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.ToTable("RefreshTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.Role", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -177,7 +177,7 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.ToTable("Roles", (string)null);
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.User", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -214,22 +214,28 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.UserRole", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.UserRole", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserRole");
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.Workspace", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.Workspace", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -259,36 +265,69 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.ToTable("Workspaces", (string)null);
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.Column", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.WorkspaceMembership", b =>
                 {
-                    b.HasOne("WorkBoard.Domain.Project", null)
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("JoinedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WorkspaceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId")
+                        .IsUnique()
+                        .HasFilter("[Role] = 0");
+
+                    b.HasIndex("UserId", "WorkspaceId")
+                        .IsUnique();
+
+                    b.HasIndex("WorkspaceId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("WorkspaceMemberships", (string)null);
+                });
+
+            modelBuilder.Entity("WorkBoard.Domain.Entities.Column", b =>
+                {
+                    b.HasOne("WorkBoard.Domain.Entities.Project", null)
                         .WithMany("Columns")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.Issue", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.Issue", b =>
                 {
-                    b.HasOne("WorkBoard.Domain.Column", null)
+                    b.HasOne("WorkBoard.Domain.Entities.Column", null)
                         .WithMany("Issues")
                         .HasForeignKey("ColumnId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.Project", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.Project", b =>
                 {
-                    b.HasOne("WorkBoard.Domain.Workspace", null)
+                    b.HasOne("WorkBoard.Domain.Entities.Workspace", null)
                         .WithMany("Projects")
                         .HasForeignKey("WorkspaceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.RefreshToken", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.RefreshToken", b =>
                 {
-                    b.HasOne("WorkBoard.Domain.User", "User")
+                    b.HasOne("WorkBoard.Domain.Entities.User", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -297,15 +336,15 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.UserRole", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.UserRole", b =>
                 {
-                    b.HasOne("WorkBoard.Domain.Role", "Role")
+                    b.HasOne("WorkBoard.Domain.Entities.Role", "Role")
                         .WithMany("UsersRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WorkBoard.Domain.User", "User")
+                    b.HasOne("WorkBoard.Domain.Entities.User", "User")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -316,30 +355,53 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.Column", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.WorkspaceMembership", b =>
+                {
+                    b.HasOne("WorkBoard.Domain.Entities.User", "User")
+                        .WithMany("Memberships")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorkBoard.Domain.Entities.Workspace", "Workspace")
+                        .WithMany("Members")
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("Workspace");
+                });
+
+            modelBuilder.Entity("WorkBoard.Domain.Entities.Column", b =>
                 {
                     b.Navigation("Issues");
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.Project", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.Project", b =>
                 {
                     b.Navigation("Columns");
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.Role", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.Role", b =>
                 {
                     b.Navigation("UsersRoles");
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.User", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.User", b =>
                 {
+                    b.Navigation("Memberships");
+
                     b.Navigation("RefreshTokens");
 
                     b.Navigation("Roles");
                 });
 
-            modelBuilder.Entity("WorkBoard.Domain.Workspace", b =>
+            modelBuilder.Entity("WorkBoard.Domain.Entities.Workspace", b =>
                 {
+                    b.Navigation("Members");
+
                     b.Navigation("Projects");
                 });
 #pragma warning restore 612, 618

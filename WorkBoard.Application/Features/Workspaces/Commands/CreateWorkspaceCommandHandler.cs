@@ -30,7 +30,7 @@ public sealed class CreateWorkspaceCommandHandler : IRequestHandler<CreateWorksp
         if (!_currentUser.IsAuthenticated)
             throw new UnauthorizedAccessException("User not authenticated");
 
-        workspace.SetOwner(new Guid(_currentUser.UserId!));
+        workspace.SetOwner(_currentUser.UserId);
 
         await _workspaceRepository.AddAsync(workspace, token);
 

@@ -17,6 +17,7 @@ public static class InfrastructureExtensions
         services.AddScoped<IWorkspaceRepository, EfWorkspaceRepository>();
         services.AddScoped<IUserRepository, EfUserRepository>();
         services.AddScoped<IRoleRepository, EfRoleRepository>();
+        services.AddScoped<IWorkspaceMembershipRepository, EfWorkspaceMembershipRepository>();
         services.AddScoped<IRefreshTokenRepository, EfRefreshTokenRepository>();
 
         services.AddScoped<IRefreshTokenGenerator, RefreshTokenGenerator>();
