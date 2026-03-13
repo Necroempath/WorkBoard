@@ -40,7 +40,8 @@ public sealed class EfWorkspaceMembershipRepository : IWorkspaceMembershipReposi
     public async Task<IEnumerable<WorkspaceMembership>> GetMembersAsync(Guid workspaceId, CancellationToken ct)
     {
         return await _context.WorkspaceMemberships.Where(wm => wm.WorkspaceId == workspaceId)
-                                                  .Include(wm => wm.User).ToListAsync(ct);
+                                                  .Include(wm => wm.User)
+                                                  .Include(wm => wm.Workspace).ToListAsync(ct);
     }
 
     public async Task<WorkspaceMembership?> GetMembershipAsync(Guid userId, Guid workspaceId, CancellationToken ct)

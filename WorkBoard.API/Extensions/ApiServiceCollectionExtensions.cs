@@ -9,6 +9,7 @@ public static class ApiServiceCollectionExtensions
     {
         services.AddHttpContextAccessor();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<ICurrentWorkspaceService, CurrentWorkspaceService>();
 
         return services;
     }

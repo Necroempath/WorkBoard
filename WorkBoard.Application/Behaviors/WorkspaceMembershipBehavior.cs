@@ -24,7 +24,7 @@ public class WorkspaceMembershipBehavior<TRequest, TResponse> : IPipelineBehavio
             var membership = await _repo.GetMembershipAsync(_currentUser.UserId, workspaceRequest.WorkspaceId, ct);
 
             if (membership is null)
-                throw new UnauthorizedAccessException("You do not have permission for this action.");
+                throw new InvalidOperationException("Desired workspace not found");
 
             _currentWorkspace.WorkspaceId = workspaceRequest.WorkspaceId;
             _currentWorkspace.Membership = membership;
