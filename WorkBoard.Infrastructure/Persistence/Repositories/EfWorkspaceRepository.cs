@@ -21,14 +21,14 @@ public sealed class EfWorkspaceRepository : IWorkspaceRepository
         return workspace;
     }
 
-    public async Task<IEnumerable<Workspace>> GetAllAsync(CancellationToken token)
+    public async Task<IEnumerable<Workspace>> GetAllAsync(Guid userId, CancellationToken token)
     {
-        return _context.Workspaces;
+        return await _context.Workspaces.Where(w => w.Members.Any(wm => wm.UserId == userId)).ToListAsync(token);
     }
 
-    public async Task<Workspace?> GetByIdAsync(Guid id, CancellationToken token)
+    public async Task<Workspace?> GetByIdAsync(Guid id, Guid userId, CancellationToken token)
     {
         return await _context.Workspaces
-            .FirstOrDefaultAsync(x => x.Id == id, token);
+            .FirstOrDefaultAsync(w => w.Id == id && w.Members.Any(wm => wm.UserId == userId), token);
     }
 }

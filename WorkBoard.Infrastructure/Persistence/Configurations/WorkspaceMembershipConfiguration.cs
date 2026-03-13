@@ -16,6 +16,9 @@ class WorkspaceMembershipConfiguration : IEntityTypeConfiguration<WorkspaceMembe
         builder.HasIndex(x => new { x.WorkspaceId, x.UserId })
                 .IsUnique();
 
+        builder.HasIndex(x => new { x.UserId, x.WorkspaceId})
+               .IsUnique();
+
         builder.HasIndex(x => x.WorkspaceId)
                .IsUnique()
                .HasFilter("[Role] = 0");
