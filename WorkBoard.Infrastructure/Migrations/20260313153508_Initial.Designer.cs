@@ -12,7 +12,7 @@ using WorkBoard.Infrastructure.Persistence;
 namespace WorkBoard.Infrastructure.Migrations
 {
     [DbContext(typeof(WorkBoardDbContext))]
-    [Migration("20260313113824_Initial")]
+    [Migration("20260313153508_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

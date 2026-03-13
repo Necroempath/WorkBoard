@@ -18,6 +18,8 @@ public sealed class EfWorkspaceMembershipRepository : IWorkspaceMembershipReposi
     {
         await _context.WorkspaceMemberships.AddAsync(membership, ct);
 
+        await _context.SaveChangesAsync(ct);
+
         return membership;
     }
 

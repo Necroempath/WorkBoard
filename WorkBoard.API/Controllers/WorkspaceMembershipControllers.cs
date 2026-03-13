@@ -24,10 +24,10 @@ public sealed class WorkspaceMembershipControllers : ControllerBase
         return Ok(await _mediator.Send(new GetAllMembersQuery(workspaceId), token));
     }
 
-    //[HttpPost]
-    //[Authorize]
-    //public async Task<ActionResult<WorkspaceResponseDto>> Create([FromBody] CreateWorkspaceRequest dto, CancellationToken token)
-    //{
-    //    return Ok(await _mediator.Send(new CreateWorkspaceCommand(dto), token));
-    //}
+    [HttpPost]
+    [Authorize]
+    public async Task<ActionResult<WorkspaceMembershipResponseDto>> AddMember([FromBody] CreateWorkspaceRequest dto, CancellationToken token)
+    {
+        return Ok(await _mediator.Send(new CreateWorkspaceCommand(dto), token));
+    }
 }

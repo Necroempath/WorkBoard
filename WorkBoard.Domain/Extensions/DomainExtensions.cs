@@ -8,4 +8,8 @@ public static class DomainExtensions
     {
         return role is WorkspaceRole.Owner or WorkspaceRole.Admin;
     }
+    public static bool CanViewMembers(this WorkspaceRole role)
+    {
+        return role is WorkspaceRole.Owner or WorkspaceRole.Admin or WorkspaceRole.Member;
+    }
 }
