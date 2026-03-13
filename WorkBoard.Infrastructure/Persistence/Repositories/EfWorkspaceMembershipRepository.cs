@@ -14,7 +14,7 @@ public sealed class EfWorkspaceMembershipRepository : IWorkspaceMembershipReposi
         _context = context;
     }
 
-    public async Task<WorkspaceMembership> AddMemberAsync(WorkspaceMembership membership, CancellationToken ct)
+    public async Task<WorkspaceMembership> AddMembershipAsync(WorkspaceMembership membership, CancellationToken ct)
     {
         await _context.WorkspaceMemberships.AddAsync(membership, ct);
 

@@ -15,11 +15,12 @@ public sealed class WorkspaceMembership
 
     private WorkspaceMembership() { }
 
-    public WorkspaceMembership(Guid userId, Guid workspaceId, WorkspaceRole role)
+    public WorkspaceMembership(Guid userId, Guid workspaceId, WorkspaceRole role, DateTimeOffset joinedAt)
     {
         UserId = userId;
         WorkspaceId = workspaceId;
         Role = role;
+        JoinedAt = joinedAt;
     }
 
 

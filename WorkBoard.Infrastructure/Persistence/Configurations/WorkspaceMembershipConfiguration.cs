@@ -22,5 +22,15 @@ class WorkspaceMembershipConfiguration : IEntityTypeConfiguration<WorkspaceMembe
         builder.HasIndex(x => x.WorkspaceId)
                .IsUnique()
                .HasFilter("[Role] = 0");
+
+        builder.HasOne(wm => wm.Workspace)
+               .WithMany(w => w.Members)
+               .HasForeignKey(wm => wm.WorkspaceId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(wm => wm.User)
+               .WithMany(u => u.Memberships)
+               .HasForeignKey(wm => wm.UserId)
+               .OnDelete(DeleteBehavior.Cascade); 
     }
 }
