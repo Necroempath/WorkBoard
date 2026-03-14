@@ -133,17 +133,17 @@ namespace WorkBoard.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MemberId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     WorkspaceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
-                    JoinedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    JoinedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_WorkspaceMemberships", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WorkspaceMemberships_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_WorkspaceMemberships_Users_MemberId",
+                        column: x => x.MemberId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -234,9 +234,9 @@ namespace WorkBoard.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkspaceMemberships_UserId_WorkspaceId",
+                name: "IX_WorkspaceMemberships_MemberId_WorkspaceId",
                 table: "WorkspaceMemberships",
-                columns: new[] { "UserId", "WorkspaceId" },
+                columns: new[] { "MemberId", "WorkspaceId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -247,9 +247,9 @@ namespace WorkBoard.Infrastructure.Migrations
                 filter: "[Role] = 0");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkspaceMemberships_WorkspaceId_UserId",
+                name: "IX_WorkspaceMemberships_WorkspaceId_MemberId",
                 table: "WorkspaceMemberships",
-                columns: new[] { "WorkspaceId", "UserId" },
+                columns: new[] { "WorkspaceId", "MemberId" },
                 unique: true);
         }
 

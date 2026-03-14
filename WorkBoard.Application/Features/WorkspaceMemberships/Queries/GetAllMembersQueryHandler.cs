@@ -22,7 +22,7 @@ public sealed class GetAllMembersQueryHandler : IRequestHandler<GetAllMembersQue
     public async Task<IEnumerable<WorkspaceMembershipResponseDto>> Handle(GetAllMembersQuery request, CancellationToken ct)
     {
         if (!_currentWorkspace.Membership.Role.CanViewMembers())
-            throw new UnauthorizedAccessException("Members, Admins or Owner only allowed for this action");
+            throw new InvalidOperationException("Members, Admins or Owner only allowed for this action");
 
         var members = await _membershipRepository.GetMembersAsync(_currentWorkspace.WorkspaceId, ct);
 

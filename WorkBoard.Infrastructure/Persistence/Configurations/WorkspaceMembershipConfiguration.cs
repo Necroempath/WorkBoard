@@ -13,10 +13,10 @@ class WorkspaceMembershipConfiguration : IEntityTypeConfiguration<WorkspaceMembe
 
         builder.HasKey(x => x.Id);
 
-        builder.HasIndex(x => new { x.WorkspaceId, x.UserId })
+        builder.HasIndex(x => new { x.WorkspaceId, x.MemberId })
                 .IsUnique();
 
-        builder.HasIndex(x => new { x.UserId, x.WorkspaceId})
+        builder.HasIndex(x => new { x.MemberId, x.WorkspaceId})
                .IsUnique();
 
         builder.HasIndex(x => x.WorkspaceId)
@@ -28,9 +28,13 @@ class WorkspaceMembershipConfiguration : IEntityTypeConfiguration<WorkspaceMembe
                .HasForeignKey(wm => wm.WorkspaceId)
                .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(wm => wm.User)
+        builder.HasOne(wm => wm.Member)
                .WithMany(u => u.Memberships)
-               .HasForeignKey(wm => wm.UserId)
-               .OnDelete(DeleteBehavior.Cascade); 
+               .HasForeignKey(wm => wm.MemberId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Property(c => c.JoinedAt)
+                .HasDefaultValueSql("GETUTCDATE()")
+                .IsRequired();
     }
 }

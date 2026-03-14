@@ -5,8 +5,8 @@ public sealed class Workspace : BaseEntity
     public string Name { get; private set; } = string.Empty;
     public Guid OwnerId { get; private set; }
 
-    private readonly List<WorkspaceMembership> _members= new();
-    public IReadOnlyCollection<WorkspaceMembership> Members=> _members;
+    private readonly List<WorkspaceMembership> _members = new();
+    public IReadOnlyCollection<WorkspaceMembership> Members => _members;
 
     private readonly List<Project> _projects = new();
     public IReadOnlyCollection<Project> Projects => _projects;

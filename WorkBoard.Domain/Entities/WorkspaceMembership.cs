@@ -5,8 +5,8 @@ namespace WorkBoard.Domain.Entities;
 public sealed class WorkspaceMembership
 {
     public Guid Id { get; private set; }
-    public Guid UserId { get; private set; }
-    public User User { get; private set; } = null!;
+    public Guid MemberId { get; private set; }
+    public User Member { get; private set; } = null!;
     public Guid WorkspaceId { get; private set; }
     public Workspace Workspace { get; private set; } = null!;
 
@@ -15,13 +15,11 @@ public sealed class WorkspaceMembership
 
     private WorkspaceMembership() { }
 
-    public WorkspaceMembership(Guid userId, Guid workspaceId, WorkspaceRole role, DateTimeOffset joinedAt)
+    public WorkspaceMembership(Guid memberId, Guid workspaceId, WorkspaceRole role, DateTimeOffset joinedAt)
     {
-        UserId = userId;
+        MemberId = memberId;
         WorkspaceId = workspaceId;
         Role = role;
         JoinedAt = joinedAt;
     }
-
-
 }

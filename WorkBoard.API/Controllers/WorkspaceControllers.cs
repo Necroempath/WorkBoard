@@ -29,6 +29,7 @@ public sealed class WorkspaceControllers : ControllerBase
     [Authorize]
     public async Task<ActionResult<WorkspaceResponseDto>> Create([FromBody]CreateWorkspaceRequest dto, CancellationToken token)
     {
+       // return Created(,);
         return Ok(await _mediator.Send(new CreateWorkspaceCommand(dto), token));
     }
 }

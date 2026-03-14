@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkBoard.Application.Features.WorkspaceMemberships;
+using WorkBoard.Application.Features.WorkspaceMemberships.Commands;
 using WorkBoard.Application.Features.WorkspaceMemberships.Queries;
 
 namespace WorkBoard.API.Controllers;
@@ -24,10 +25,17 @@ public sealed class WorkspaceMembershipControllers : ControllerBase
         return Ok(await _mediator.Send(new GetAllMembersQuery(workspaceId), token));
     }
 
-    //[HttpPost]
-    //[Authorize]
-    //public async Task<ActionResult<WorkspaceMembershipResponseDto>> AddMember([FromBody] CreateWorkspaceRequest dto, CancellationToken token)
-    //{
-    //    return Ok(await _mediator.Send(new CreateWorkspaceCommand(dto), token));
-    //}
+    [HttpPost("{workspaceId}")]
+    [Authorize]
+    public async Task<ActionResult<WorkspaceMembershipResponseDto>> AddMember([FromBody]AddMemberRequest dto, Guid workspaceId, CancellationToken token)
+    {
+        return Ok(await _mediator.Send(new AddMemberCommand(dto, workspaceId), token));
+    }
+
+    [HttpDelete("{workspaceId}")]
+    [Authorize]
+    public async Task<ActionResult<WorkspaceMembershipResponseDto>> RemoveMember([FromBody]Guid memberId, Guid workspaceId, CancellationToken token)
+    {
+        return Ok(await _mediator.Send(new RemoveMemberCommand(memberId, workspaceId), token));
+    }
 }

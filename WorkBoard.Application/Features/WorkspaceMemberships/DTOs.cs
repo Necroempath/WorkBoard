@@ -16,6 +16,5 @@ public sealed class WorkspaceMembershipResponseDto
 public sealed class AddMemberRequest
 {
     public Guid MemberId { get; set; }
-    public Guid WorkspaceId { get; set; }
     public WorkspaceRole Role { get; set; }
 }

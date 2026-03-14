@@ -9,6 +9,6 @@ public interface IWorkspaceMembershipRepository
     Task<IEnumerable<WorkspaceMembership>> GetWorkspacesAsync(Guid userId, CancellationToken ct);
     Task<WorkspaceMembership?> GetMembershipAsync(Guid userId, Guid workspaceId, CancellationToken ct);
     Task<WorkspaceMembership> AddMembershipAsync(WorkspaceMembership membership, CancellationToken ct); 
-    Task<bool> RemoveMemberAsync(Guid id, CancellationToken ct);
+    Task<bool> RemoveMemberAsync(Guid memberId, Guid workspaceId, CancellationToken ct);
     Task<WorkspaceMembership?> ChangeRoleAsync(Guid id, WorkspaceRole role, CancellationToken ct);
 }

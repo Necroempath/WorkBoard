@@ -18,8 +18,4 @@
 		<ProjectReference Include="..\WorkBoard.Domain\WorkBoard.Domain.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Features\WorkspaceMemberships\Commands\" />
-	</ItemGroup>
-
 </Project>

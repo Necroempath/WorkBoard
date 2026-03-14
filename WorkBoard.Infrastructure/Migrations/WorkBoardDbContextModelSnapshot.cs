@@ -272,13 +272,15 @@ namespace WorkBoard.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("JoinedAt")
-                        .HasColumnType("datetimeoffset");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<Guid>("MemberId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("WorkspaceId")
                         .HasColumnType("uniqueidentifier");
@@ -289,10 +291,10 @@ namespace WorkBoard.Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("[Role] = 0");
 
-                    b.HasIndex("UserId", "WorkspaceId")
+                    b.HasIndex("MemberId", "WorkspaceId")
                         .IsUnique();
 
-                    b.HasIndex("WorkspaceId", "UserId")
+                    b.HasIndex("WorkspaceId", "MemberId")
                         .IsUnique();
 
                     b.ToTable("WorkspaceMemberships", (string)null);
@@ -357,9 +359,9 @@ namespace WorkBoard.Infrastructure.Migrations
 
             modelBuilder.Entity("WorkBoard.Domain.Entities.WorkspaceMembership", b =>
                 {
-                    b.HasOne("WorkBoard.Domain.Entities.User", "User")
+                    b.HasOne("WorkBoard.Domain.Entities.User", "Member")
                         .WithMany("Memberships")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -369,7 +371,7 @@ namespace WorkBoard.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Member");
 
                     b.Navigation("Workspace");
                 });

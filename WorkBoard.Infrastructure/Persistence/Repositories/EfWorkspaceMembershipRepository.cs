@@ -40,25 +40,28 @@ public sealed class EfWorkspaceMembershipRepository : IWorkspaceMembershipReposi
     public async Task<IEnumerable<WorkspaceMembership>> GetMembersAsync(Guid workspaceId, CancellationToken ct)
     {
         return await _context.WorkspaceMemberships.Where(wm => wm.WorkspaceId == workspaceId)
-                                                  .Include(wm => wm.User)
+                                                  .Include(wm => wm.Member)
                                                   .Include(wm => wm.Workspace).ToListAsync(ct);
     }
 
     public async Task<WorkspaceMembership?> GetMembershipAsync(Guid userId, Guid workspaceId, CancellationToken ct)
     {
         return await _context.WorkspaceMemberships
-            .FirstOrDefaultAsync(wm => wm.UserId == userId && wm.WorkspaceId == workspaceId, ct);
+            .Include(wm => wm.Workspace)
+            .Include(wm => wm.Member)
+            .FirstOrDefaultAsync(wm => wm.MemberId == userId && wm.WorkspaceId == workspaceId, ct);
     }
 
     public async Task<IEnumerable<WorkspaceMembership>> GetWorkspacesAsync(Guid userId, CancellationToken ct)
     {
-        return await _context.WorkspaceMemberships.Where(wm => wm.UserId == userId).ToListAsync(ct);
+        return await _context.WorkspaceMemberships
+            .Where(wm => wm.MemberId == userId).ToListAsync(ct);
 
     }
 
-    public async Task<bool> RemoveMemberAsync(Guid id, CancellationToken ct)
+    public async Task<bool> RemoveMemberAsync(Guid memberId, Guid workspaceId, CancellationToken ct)
     {
-        var membership = await _context.WorkspaceMemberships.FirstOrDefaultAsync(wm => wm.Id == id, ct);
+        var membership = await GetMembershipAsync(memberId, workspaceId, ct);
 
         if (membership is null)
             return false;

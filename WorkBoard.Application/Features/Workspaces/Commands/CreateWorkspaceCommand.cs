@@ -2,7 +2,4 @@
 
 namespace WorkBoard.Application.Features.Workspaces.CreateWorkspace;
 
-public sealed record CreateWorkspaceCommand(CreateWorkspaceRequest Request) : IRequest<WorkspaceResponseDto>
-{
-    public Guid UserId { get; set; }
-}
+public sealed record CreateWorkspaceCommand(CreateWorkspaceRequest Request) : IRequest<WorkspaceResponseDto>;
