@@ -7,8 +7,12 @@ public sealed class Issue : BaseEntity
     public string Title { get; private set; } = string.Empty;
     public IssuePriority Priority { get; set; } = IssuePriority.Medium;
     public string? Description { get; private set; }
-    public Guid ColumnId { get; private set; }
     public int Order { get; private set; }
+
+    public Guid ColumnId { get; private set; }
+    public Column Column { get; private set; }
+    public Guid ProjectId { get; private set; }
+    public Project Project { get; private set; }
 
     private Issue() { }
 

@@ -6,9 +6,13 @@ public sealed class Project : BaseEntity
 {
     public string Name { get; private set; } = string.Empty;
     public Guid WorkspaceId { get; private set; }
+    public Workspace Workspace { get; private set; }
 
     private readonly List<Column> _columns = new();
     public IReadOnlyCollection<Column> Columns => _columns;
+
+    private readonly List<Issue> _issues = new();
+    public IReadOnlyCollection<Issue> Issues => _issues;
 
     private Project() { }
 
@@ -16,8 +20,6 @@ public sealed class Project : BaseEntity
     {
         SetName(name);
         SetWorkspaceId(workspaceId);
-
-        InitializeDefaultColumns();
     }
 
     public void Rename(string name)
@@ -45,7 +47,7 @@ public sealed class Project : BaseEntity
         ReorderColumns();
     }
 
-    private void InitializeDefaultColumns()
+    public void InitializeDefaultColumns()
     {
         _columns.Add(new Column("To Do", Id, 0));
         _columns.Add(new Column("In Progress", Id, 1));

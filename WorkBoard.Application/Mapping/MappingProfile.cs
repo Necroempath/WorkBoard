@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using WorkBoard.Application.Features.Authentication;
+using WorkBoard.Application.Features.Projects;
 using WorkBoard.Application.Features.WorkspaceMemberships;
 using WorkBoard.Application.Features.Workspaces;
 using WorkBoard.Domain.Entities;
@@ -26,5 +27,8 @@ sealed class MappingProfile : Profile
         CreateMap<User, AuthResponseDto>()
             .ForMember(dest => dest.Roles, 
             opt => opt.MapFrom(src => src.Roles.Select(r => r.Role.Name)));
+
+        // Project
+        CreateMap<Project, ProjectResponseDto>();
     }
 }

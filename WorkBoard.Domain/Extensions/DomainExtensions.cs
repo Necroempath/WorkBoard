@@ -9,4 +9,6 @@ public static class DomainExtensions
     public static bool CanViewMembers(this WorkspaceRole role) => role is WorkspaceRole.Owner or WorkspaceRole.Admin or WorkspaceRole.Member;
 
     public static bool CanDeleteMembers(this WorkspaceRole role) => role is WorkspaceRole.Owner;
+
+    public static bool CanManageProjects(this WorkspaceRole role) => role is WorkspaceRole.Owner or WorkspaceRole.Admin;
 }

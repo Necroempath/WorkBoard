@@ -15,6 +15,7 @@ public static class InfrastructureExtensions
             options.UseSqlServer(configuration.GetConnectionString("Default")));
 
         services.AddScoped<IWorkspaceRepository, EfWorkspaceRepository>();
+        services.AddScoped<IProjectRepository, EfProjectRepository>();
         services.AddScoped<IUserRepository, EfUserRepository>();
         services.AddScoped<IRoleRepository, EfRoleRepository>();
         services.AddScoped<IWorkspaceMembershipRepository, EfWorkspaceMembershipRepository>();

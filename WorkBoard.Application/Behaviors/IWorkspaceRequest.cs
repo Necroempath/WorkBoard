@@ -2,5 +2,5 @@
 
 internal interface IWorkspaceRequest
 {
-    Guid WorkspaceId { get; }
+   Guid WorkspaceId { get; }
 }
