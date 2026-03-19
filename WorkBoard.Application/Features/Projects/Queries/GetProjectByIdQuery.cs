@@ -3,4 +3,4 @@ using WorkBoard.Application.Behaviors;
 
 namespace WorkBoard.Application.Features.Projects.Queries;
 
-public sealed record GetProjectByIdQuery(Guid ProjectId, Guid WorkspaceId) : IRequest<ProjectResponseDto?>, IWorkspaceRequest;
+public sealed record GetProjectByIdQuery(Guid ProjectId) : IRequest<ProjectResponseDto?>, IProjectRequest;

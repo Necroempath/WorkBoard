@@ -3,6 +3,7 @@ using MediatR;
 using WorkBoard.Application.Abstractions;
 using WorkBoard.Application.Abstractions.Repositories;
 using WorkBoard.Domain.Entities;
+using WorkBoard.Domain.Extensions;
 
 namespace WorkBoard.Application.Features.Projects.Commands;
 

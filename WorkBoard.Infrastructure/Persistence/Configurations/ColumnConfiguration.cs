@@ -4,35 +4,30 @@ using WorkBoard.Domain.Entities;
 
 namespace WorkBoard.Infrastructure.Persistence.Configurations;
 
-public sealed class IssueConfiguration : IEntityTypeConfiguration<Issue>
+public sealed class ColumnConfiguration : IEntityTypeConfiguration<Column>
 {
-    public void Configure(EntityTypeBuilder<Issue> builder)
+    public void Configure(EntityTypeBuilder<Column> builder)
     {
-        builder.ToTable("Issues");
+        builder.ToTable("Columns");
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Title)
+        builder.Property(x => x.Name)
             .IsRequired()
-            .HasMaxLength(200);
+            .HasMaxLength(50);
 
-        builder.Property(x => x.Description)
+        builder.Property(x => x.Name)
             .IsRequired(false);
 
-        builder.Property(x => x.ColumnId)
+        builder.Property(x => x.ProjectId)
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)
             .HasDefaultValueSql("GETUTCDATE()")
             .IsRequired();
 
-        builder.HasOne(x => x.Column)
-            .WithMany(x => x.Issues)
-            .HasForeignKey(x => x.ColumnId)
-            .OnDelete(DeleteBehavior.NoAction);
-
         builder.HasOne(x => x.Project)
-            .WithMany(x => x.Issues)
+            .WithMany(x => x.Columns)
             .HasForeignKey(x => x.ProjectId)
             .OnDelete(DeleteBehavior.NoAction);
     }

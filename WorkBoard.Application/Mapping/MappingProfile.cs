@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using WorkBoard.Application.Features.Authentication;
+using WorkBoard.Application.Features.Issues;
 using WorkBoard.Application.Features.Projects;
 using WorkBoard.Application.Features.WorkspaceMemberships;
 using WorkBoard.Application.Features.Workspaces;
@@ -30,5 +31,10 @@ sealed class MappingProfile : Profile
 
         // Project
         CreateMap<Project, ProjectResponseDto>();
+
+        // Issue
+        CreateMap<Issue, IssueResponseDto>();
+        CreateMap<CreateIssueRequest, Issue>();
+        CreateMap<UpdateIssueRequest, Issue>();
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WorkBoard.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class New : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -107,21 +107,21 @@ namespace WorkBoard.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Project",
+                name: "Projects",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     WorkspaceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Project", x => x.Id);
+                    table.PrimaryKey("PK_Projects", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Project_Workspaces_WorkspaceId",
+                        name: "FK_Projects_Workspaces_WorkspaceId",
                         column: x => x.WorkspaceId,
                         principalTable: "Workspaces",
                         principalColumn: "Id",
@@ -156,66 +156,78 @@ namespace WorkBoard.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Column",
+                name: "Columns",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Order = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Column", x => x.Id);
+                    table.PrimaryKey("PK_Columns", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Column_Project_ProjectId",
+                        name: "FK_Columns_Projects_ProjectId",
                         column: x => x.ProjectId,
-                        principalTable: "Project",
+                        principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Issue",
+                name: "Issues",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ColumnId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Order = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ColumnId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Issue", x => x.Id);
+                    table.PrimaryKey("PK_Issues", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Issue_Column_ColumnId",
+                        name: "FK_Issues_Columns_ColumnId",
                         column: x => x.ColumnId,
-                        principalTable: "Column",
+                        principalTable: "Columns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Issues_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Column_ProjectId",
-                table: "Column",
+                name: "IX_Columns_ProjectId",
+                table: "Columns",
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Issue_ColumnId",
-                table: "Issue",
+                name: "IX_Issues_ColumnId",
+                table: "Issues",
                 column: "ColumnId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Project_WorkspaceId",
-                table: "Project",
+                name: "IX_Issues_ProjectId",
+                table: "Issues",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Projects_WorkspaceId",
+                table: "Projects",
                 column: "WorkspaceId");
 
             migrationBuilder.CreateIndex(
@@ -257,7 +269,7 @@ namespace WorkBoard.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Issue");
+                name: "Issues");
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");
@@ -269,7 +281,7 @@ namespace WorkBoard.Infrastructure.Migrations
                 name: "WorkspaceMemberships");
 
             migrationBuilder.DropTable(
-                name: "Column");
+                name: "Columns");
 
             migrationBuilder.DropTable(
                 name: "Roles");
@@ -278,7 +290,7 @@ namespace WorkBoard.Infrastructure.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Project");
+                name: "Projects");
 
             migrationBuilder.DropTable(
                 name: "Workspaces");

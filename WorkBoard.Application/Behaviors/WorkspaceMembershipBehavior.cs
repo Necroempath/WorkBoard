@@ -9,14 +9,16 @@ public class WorkspaceMembershipBehavior<TRequest, TResponse> : IPipelineBehavio
 {
     private readonly IWorkspaceMembershipRepository _membershipRepository;
     private readonly IProjectRepository _projectRepository;
+    private readonly IIssueRepository _issueRepository;
     private readonly ICurrentWorkspaceService _currentWorkspace;
     private readonly ICurrentUserService _currentUser;
 
     public WorkspaceMembershipBehavior(IWorkspaceMembershipRepository membershipRepository, IProjectRepository projectRepository,
-        ICurrentWorkspaceService workspace, ICurrentUserService user)
+        IIssueRepository issueRepository, ICurrentWorkspaceService workspace, ICurrentUserService user)
     {
         _membershipRepository = membershipRepository;
         _projectRepository = projectRepository;
+        _issueRepository = issueRepository;
         _currentWorkspace = workspace;
         _currentUser = user;
     }
@@ -40,7 +42,29 @@ public class WorkspaceMembershipBehavior<TRequest, TResponse> : IPipelineBehavio
 
             workspaceId = project.WorkspaceId;
 
-            membership = await _membershipRepository.GetMembershipAsync(_currentUser.UserId, project.WorkspaceId, ct)
+            membership = await _membershipRepository.GetMembershipAsync(_currentUser.UserId, workspaceId, ct)
+                ?? throw new InvalidOperationException("Invalid Workspace Id");
+        }
+        else if (request is IColumnRequest columnRequest)
+        {
+            var column = await _projectRepository.GetColumnByIdAsync(columnRequest.ColumnId, ct)
+                ?? throw new InvalidOperationException("Invalid Column Id");
+
+            workspaceId = column.Project.WorkspaceId;
+
+            membership = await _membershipRepository.GetMembershipAsync(_currentUser.UserId, workspaceId, ct)
+                ?? throw new InvalidOperationException("Invalid Workspace Id");
+        }
+        else if (request is IIssueRequest issueRequest)
+        {
+            var issue = await _issueRepository.GetByIdAsync(issueRequest.IssueId, ct)
+                ?? throw new InvalidOperationException("Invalid Issue Id");
+
+            if (issue.Project is null) throw new InvalidOperationException("Project not found");
+
+            workspaceId = issue.Project.WorkspaceId;
+
+            membership = await _membershipRepository.GetMembershipAsync(_currentUser.UserId, workspaceId, ct)
                 ?? throw new InvalidOperationException("Invalid Workspace Id");
         }
         else

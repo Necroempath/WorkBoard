@@ -22,11 +22,17 @@ public sealed class EfIssueRepository : IIssueRepository
         return issue;
     }
 
-    public async Task DeleteAsync(Issue issue, CancellationToken token)
+    public async Task<bool> DeleteAsync(Guid issueId, CancellationToken token)
     {
+        var issue = await _context.Issues.FirstOrDefaultAsync(i => i.Id == issueId, token);
+
+        if (issue is null) return false;
+
         _context.Issues.Remove(issue);
 
         await _context.SaveChangesAsync(token);
+
+        return true;
     }
 
     public async Task<IEnumerable<Issue>> GetByProjectIdAsync(Guid projectId, CancellationToken token)
@@ -41,6 +47,12 @@ public sealed class EfIssueRepository : IIssueRepository
 
     public async Task<Issue?> GetByIdAsync(Guid issueId, CancellationToken token)
     {
-        return await _context.Issues.FirstOrDefaultAsync(i => i.Id == issueId, token);
+        return await _context.Issues.Include(i => i.Project)
+            .FirstOrDefaultAsync(i => i.Id == issueId, token);
+    }
+
+    public async Task SaveAsync(CancellationToken token)
+    {
+        await _context.SaveChangesAsync(token);
     }
 }

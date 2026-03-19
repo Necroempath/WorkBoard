@@ -9,6 +9,7 @@ public sealed class WorkBoardDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<Project> Projects => Set<Project>();
+    public DbSet<Column> Columns => Set<Column>();
     public DbSet<Issue> Issues => Set<Issue>();
     public DbSet<WorkspaceMembership> WorkspaceMemberships => Set<WorkspaceMembership>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();

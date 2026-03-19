@@ -12,8 +12,8 @@ using WorkBoard.Infrastructure.Persistence;
 namespace WorkBoard.Infrastructure.Migrations
 {
     [DbContext(typeof(WorkBoardDbContext))]
-    [Migration("20260314113223_Initial")]
-    partial class Initial
+    [Migration("20260319150317_2New")]
+    partial class _2New
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,14 +32,16 @@ namespace WorkBoard.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Order")
                         .HasColumnType("int");
@@ -54,7 +56,7 @@ namespace WorkBoard.Infrastructure.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Column");
+                    b.ToTable("Columns", (string)null);
                 });
 
             modelBuilder.Entity("WorkBoard.Domain.Entities.Issue", b =>
@@ -67,7 +69,9 @@ namespace WorkBoard.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
@@ -81,9 +85,13 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
@@ -92,7 +100,9 @@ namespace WorkBoard.Infrastructure.Migrations
 
                     b.HasIndex("ColumnId");
 
-                    b.ToTable("Issue");
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Issues", (string)null);
                 });
 
             modelBuilder.Entity("WorkBoard.Domain.Entities.Project", b =>
@@ -102,14 +112,17 @@ namespace WorkBoard.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
@@ -121,7 +134,7 @@ namespace WorkBoard.Infrastructure.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("Project");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("WorkBoard.Domain.Entities.RefreshToken", b =>
@@ -305,29 +318,43 @@ namespace WorkBoard.Infrastructure.Migrations
 
             modelBuilder.Entity("WorkBoard.Domain.Entities.Column", b =>
                 {
-                    b.HasOne("WorkBoard.Domain.Entities.Project", null)
+                    b.HasOne("WorkBoard.Domain.Entities.Project", "Project")
                         .WithMany("Columns")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("WorkBoard.Domain.Entities.Issue", b =>
                 {
-                    b.HasOne("WorkBoard.Domain.Entities.Column", null)
+                    b.HasOne("WorkBoard.Domain.Entities.Column", "Column")
                         .WithMany("Issues")
                         .HasForeignKey("ColumnId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("WorkBoard.Domain.Entities.Project", "Project")
+                        .WithMany("Issues")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Column");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("WorkBoard.Domain.Entities.Project", b =>
                 {
-                    b.HasOne("WorkBoard.Domain.Entities.Workspace", null)
+                    b.HasOne("WorkBoard.Domain.Entities.Workspace", "Workspace")
                         .WithMany("Projects")
                         .HasForeignKey("WorkspaceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Workspace");
                 });
 
             modelBuilder.Entity("WorkBoard.Domain.Entities.RefreshToken", b =>
@@ -387,6 +414,8 @@ namespace WorkBoard.Infrastructure.Migrations
             modelBuilder.Entity("WorkBoard.Domain.Entities.Project", b =>
                 {
                     b.Navigation("Columns");
+
+                    b.Navigation("Issues");
                 });
 
             modelBuilder.Entity("WorkBoard.Domain.Entities.Role", b =>

@@ -9,6 +9,7 @@ namespace WorkBoard.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public sealed class WorkspaceControllers : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -19,14 +20,12 @@ public sealed class WorkspaceControllers : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
     public async Task<ActionResult<IEnumerable<WorkspaceResponseDto>>> GetAll(CancellationToken token)
     {
         return Ok(await _mediator.Send(new GetAllWorkspacesQuery(), token));
     }
 
     [HttpPost]
-    [Authorize]
     public async Task<ActionResult<WorkspaceResponseDto>> Create([FromBody]CreateWorkspaceRequest dto, CancellationToken token)
     {
         return Ok(await _mediator.Send(new CreateWorkspaceCommand(dto), token));

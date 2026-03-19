@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 using WorkBoard.Application.Abstractions.Repositories;
 using WorkBoard.Domain.Entities;
 
@@ -47,5 +46,10 @@ public sealed class EfProjectRepository : IProjectRepository
     public async Task SaveAsync(CancellationToken token)
     {
         await _context.SaveChangesAsync(token);
+    }
+
+    public async Task<Column?> GetColumnByIdAsync(Guid columnId, CancellationToken token)
+    {
+        return await _context.Columns.FirstOrDefaultAsync(c => c.Id == columnId, token);
     }
 }

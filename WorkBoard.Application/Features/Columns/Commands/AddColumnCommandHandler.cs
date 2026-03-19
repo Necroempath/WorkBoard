@@ -3,7 +3,7 @@ using MediatR;
 using WorkBoard.Application.Abstractions;
 using WorkBoard.Application.Abstractions.Repositories;
 using WorkBoard.Application.Features.Projects;
-using WorkBoard.Domain.Entities;
+using WorkBoard.Domain.Extensions;
 
 namespace WorkBoard.Application.Features.Columns.Commands;
 
@@ -14,7 +14,7 @@ public sealed class AddColumnCommandHandler : IRequestHandler<AddColumnCommand, 
     private readonly IMapper _mapper;
 
 
-    public AddColumnCommandHandler(IProjectRepository projectRepository, ICurrentWorkspaceService currentWorkspace, Mapper mapper)
+    public AddColumnCommandHandler(IProjectRepository projectRepository, ICurrentWorkspaceService currentWorkspace, IMapper mapper)
     {
         _projectRepository = projectRepository;
         _currentWorkspace = currentWorkspace;

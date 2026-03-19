@@ -25,7 +25,6 @@ public sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
 
         builder.HasOne(x => x.Workspace)
             .WithMany(x => x.Projects)
-            .HasForeignKey(x => x.WorkspaceId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(x => x.WorkspaceId).OnDelete(DeleteBehavior.NoAction);
     }
-}   
+}

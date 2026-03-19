@@ -10,6 +10,7 @@ namespace WorkBoard.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public sealed class ProjectControllers : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -19,30 +20,26 @@ public sealed class ProjectControllers : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("{workspaceId}")]
-    [Authorize]
+    [HttpGet("{workspaceId}/all")]
     public async Task<ActionResult<IEnumerable<ProjectResponseDto>>> GetAll(Guid workspaceId, CancellationToken token)
     {
         return Ok(await _mediator.Send(new GetAllProjectsQuery(workspaceId), token));
     }
 
-    [HttpGet("{workspaceId}/{projectId}")]
-    [Authorize]
-    public async Task<ActionResult<ProjectResponseDto>> GetById(Guid workspaceId, Guid projectId, CancellationToken token)
+    [HttpGet("{projectId}")]
+    public async Task<ActionResult<ProjectResponseDto>> GetById(Guid projectId, CancellationToken token)
     {
-        return Ok(await _mediator.Send(new GetProjectByIdQuery(projectId, workspaceId), token));
+        return Ok(await _mediator.Send(new GetProjectByIdQuery(projectId), token));
     }
 
     [HttpPost]
-    [Authorize]
-    public async Task<ActionResult<WorkspaceResponseDto>> Create([FromBody] CreateProjectRequest dto, CancellationToken token)
+    public async Task<ActionResult<ProjectResponseDto>> Create([FromBody] CreateProjectRequest dto, CancellationToken token)
     {
         return Ok(await _mediator.Send(new CreateProjectCommand(dto, dto.WorkspaceId), token));
     }
 
     [HttpDelete]
-    [Authorize]
-    public async Task<ActionResult<WorkspaceResponseDto>> Delete([FromBody]Guid projectId, CancellationToken token)
+    public async Task<ActionResult<bool>> Delete([FromBody]Guid projectId, CancellationToken token)
     {
         return Ok(await _mediator.Send(new DeleteProjectCommand(projectId), token));
     }

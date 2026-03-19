@@ -9,6 +9,7 @@ namespace WorkBoard.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public sealed class WorkspaceMembershipControllers : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -19,22 +20,19 @@ public sealed class WorkspaceMembershipControllers : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
     public async Task<ActionResult<IEnumerable<WorkspaceMembershipResponseDto>>> GetAllMembers(Guid workspaceId, CancellationToken token)
     {
         return Ok(await _mediator.Send(new GetAllMembersQuery(workspaceId), token));
     }
 
     [HttpPost("{workspaceId}")]
-    [Authorize]
     public async Task<ActionResult<WorkspaceMembershipResponseDto>> AddMember([FromBody]AddMemberRequest dto, Guid workspaceId, CancellationToken token)
     {
         return Ok(await _mediator.Send(new AddMemberCommand(dto, workspaceId), token));
     }
 
     [HttpDelete("{workspaceId}")]
-    [Authorize]
-    public async Task<ActionResult<WorkspaceMembershipResponseDto>> RemoveMember([FromBody]Guid memberId, Guid workspaceId, CancellationToken token)
+    public async Task<ActionResult<bool>> RemoveMember([FromBody]Guid memberId, Guid workspaceId, CancellationToken token)
     {
         return Ok(await _mediator.Send(new RemoveMemberCommand(memberId, workspaceId), token));
     }

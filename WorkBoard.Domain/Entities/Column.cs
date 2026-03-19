@@ -3,8 +3,9 @@
 public sealed class Column : BaseEntity
 {
     public string Name { get; private set; } = string.Empty;
-    public Guid ProjectId { get; private set; }
     public int Order { get; private set; }
+    public Guid ProjectId { get; private set; }
+    public Project Project { get; private set; }
 
     private readonly List<Issue> _issues = new();
     public IReadOnlyCollection<Issue> Issues => _issues;
