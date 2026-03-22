@@ -37,17 +37,25 @@ public sealed class EfIssueRepository : IIssueRepository
 
     public async Task<IEnumerable<Issue>> GetByProjectIdAsync(Guid projectId, CancellationToken token)
     {
-        return await _context.Issues.Where(i => i.ProjectId == projectId).ToListAsync(token);
+        return await _context.Issues.Where(i => i.ProjectId == projectId)
+            .Include(i => i.Column)
+            .Include(i => i.Project)
+            .ToListAsync(token);
     }
 
     public async Task<IEnumerable<Issue>> GetByColumnIdAsync(Guid columnId, CancellationToken token)
     {
-        return await _context.Issues.Where(i => i.ColumnId == columnId).ToListAsync(token);
+        return await _context.Issues.Where(i => i.ColumnId == columnId)
+            .Include(i => i.Column)
+            .Include(i => i.Project)
+            .ToListAsync(token);
     }
 
     public async Task<Issue?> GetByIdAsync(Guid issueId, CancellationToken token)
     {
-        return await _context.Issues.Include(i => i.Project)
+        return await _context.Issues
+            .Include(i => i.Column).ThenInclude(c => c.Issues)
+            .Include(i => i.Project)
             .FirstOrDefaultAsync(i => i.Id == issueId, token);
     }
 

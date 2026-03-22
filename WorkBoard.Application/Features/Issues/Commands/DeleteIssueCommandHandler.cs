@@ -21,7 +21,12 @@ public sealed record DeleteIssueCommandHandler : IRequestHandler<DeleteIssueComm
         if (!_currentWorkspace.Membership.Role.CanManageProjects())
             throw new InvalidOperationException("Only Owner or Admins can delete issues");
 
-        await _issueRepository.DeleteAsync(request.IssueId, ct);
+        var issue = await _issueRepository.GetByIdAsync(request.IssueId, ct)
+            ?? throw new InvalidOperationException("Issue not found");
+
+        issue.Column.RemoveIssue(issue.Id);
+
+        await _issueRepository.SaveAsync(ct);
 
         return true;
     }

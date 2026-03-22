@@ -10,12 +10,15 @@ namespace WorkBoard.Application.Features.Issues.Commands;
 public sealed class CreateIssueCommandHandler : IRequestHandler<CreateIssueCommand, IssueResponseDto>
 {
     private readonly IIssueRepository _issueRepository;
+    private readonly IProjectRepository _projectRepository;
     private readonly ICurrentWorkspaceService _currentWorkspace;
     private readonly IMapper _mapper;
 
-    public CreateIssueCommandHandler(IIssueRepository issueRepository, ICurrentWorkspaceService currentWorkspace, IMapper mapper)
+    public CreateIssueCommandHandler(IIssueRepository issueRepository,
+        IProjectRepository projectRepository, ICurrentWorkspaceService currentWorkspace, IMapper mapper)
     {
         _issueRepository = issueRepository;
+        _projectRepository = projectRepository;
         _currentWorkspace = currentWorkspace;
         _mapper = mapper;
     }
@@ -27,7 +30,12 @@ public sealed class CreateIssueCommandHandler : IRequestHandler<CreateIssueComma
 
         Issue issue = _mapper.Map<Issue>(command.Request);
 
-        await _issueRepository.CreateAsync(issue, ct);
+        var column = await _projectRepository.GetColumnByIdAsync(command.ColumnId, ct)
+            ?? throw new InvalidOperationException("Invalid column Id");
+
+        column.AddIssue(command.Request.Title, command.Request.Description, command.Request.Priority, command.Request.ProjectId);
+
+        await _projectRepository.SaveAsync(ct);
 
         return _mapper.Map<IssueResponseDto>(issue);
     }

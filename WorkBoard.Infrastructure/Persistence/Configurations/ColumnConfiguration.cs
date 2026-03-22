@@ -29,6 +29,6 @@ public sealed class ColumnConfiguration : IEntityTypeConfiguration<Column>
         builder.HasOne(x => x.Project)
             .WithMany(x => x.Columns)
             .HasForeignKey(x => x.ProjectId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

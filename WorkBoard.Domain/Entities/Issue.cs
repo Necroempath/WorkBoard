@@ -5,7 +5,7 @@ namespace WorkBoard.Domain.Entities;
 public sealed class Issue : BaseEntity
 {
     public string Title { get; private set; } = string.Empty;
-    public IssuePriority Priority { get; set; } = IssuePriority.Medium;
+    public IssuePriority Priority { get; set; }
     public string? Description { get; private set; }
     public int Order { get; private set; }
 
@@ -16,12 +16,15 @@ public sealed class Issue : BaseEntity
 
     private Issue() { }
 
-    internal Issue(string title, Guid columnId, int order, string? description = null)
+    internal Issue(string title, Guid columnId, Guid projectId, int order, IssuePriority priority = IssuePriority.Medium, string? description = null)
     {
         SetTitle(title);
         SetDescription(description);
         SetColumnId(columnId);
         SetOrder(order);
+
+        Priority = priority;
+        ProjectId = projectId;
     }
 
     public void Rename(string title)

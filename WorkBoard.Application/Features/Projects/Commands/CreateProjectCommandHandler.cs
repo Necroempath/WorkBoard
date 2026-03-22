@@ -31,6 +31,8 @@ public sealed class CreateProjectCommandHandler : IRequestHandler<CreateProjectC
 
         project.InitializeDefaultColumns();
 
+        await _projectRepository.SaveAsync(ct);
+
         return _mapper.Map<ProjectResponseDto>(project);
     }
 }

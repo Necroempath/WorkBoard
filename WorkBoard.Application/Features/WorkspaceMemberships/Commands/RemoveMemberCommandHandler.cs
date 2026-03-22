@@ -24,7 +24,10 @@ public sealed class RemoveMemberCommandHandler : IRequestHandler<RemoveMemberCom
     public async Task<bool> Handle(RemoveMemberCommand command, CancellationToken ct)
     {
         if (!_currentWorkspace.Membership.Role.CanDeleteMembers())
-            throw new InvalidOperationException("Don't have permission to delete members");
+            throw new InvalidOperationException("Don't have permission to remove members");
+
+        if (_currentWorkspace.Membership.MemberId == command.MemberId)
+            throw new InvalidOperationException("Can't remove yourself, silly");
 
         var isDeleted = await _membershipRepository.RemoveMemberAsync(command.MemberId, _currentWorkspace.WorkspaceId, ct);
 

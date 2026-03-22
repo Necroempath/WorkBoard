@@ -1,4 +1,6 @@
-﻿namespace WorkBoard.Domain.Entities;
+﻿using WorkBoard.Domain.Enums;
+
+namespace WorkBoard.Domain.Entities;
 
 public sealed class Column : BaseEntity
 {
@@ -32,18 +34,20 @@ public sealed class Column : BaseEntity
         Order = order;
     }
 
-    public Issue AddIssue(string title, string? description)
+    public Issue AddIssue(string title, string? description, IssuePriority priority, Guid projectId)
     {
-        var issue = new Issue(title, Id, _issues.Count, description);
+        var issue = new Issue(title, Id, projectId, _issues.Count, priority, description);
 
         _issues.Add(issue);
         return issue;
     }
 
-    internal void RemoveIssue(Guid issueId)
+    public void RemoveIssue(Guid issueId)
     {
         var issue = _issues.FirstOrDefault(x => x.Id == issueId)
                     ?? throw new InvalidOperationException("Issue not found");
+
+        issue.MarkDeleted();
 
         _issues.Remove(issue);
         ReorderIssues();

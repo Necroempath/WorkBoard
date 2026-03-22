@@ -29,7 +29,7 @@ public sealed class IssueConfiguration : IEntityTypeConfiguration<Issue>
         builder.HasOne(x => x.Column)
             .WithMany(x => x.Issues)
             .HasForeignKey(x => x.ColumnId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Project)
             .WithMany(x => x.Issues)

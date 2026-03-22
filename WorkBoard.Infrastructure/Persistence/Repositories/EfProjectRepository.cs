@@ -50,6 +50,9 @@ public sealed class EfProjectRepository : IProjectRepository
 
     public async Task<Column?> GetColumnByIdAsync(Guid columnId, CancellationToken token)
     {
-        return await _context.Columns.FirstOrDefaultAsync(c => c.Id == columnId, token);
+        return await _context.Columns
+            .Include(c => c.Project)
+            .Include(c => c.Issues)
+            .FirstOrDefaultAsync(c => c.Id == columnId, token);
     }
 }

@@ -12,8 +12,8 @@ using WorkBoard.Infrastructure.Persistence;
 namespace WorkBoard.Infrastructure.Migrations
 {
     [DbContext(typeof(WorkBoardDbContext))]
-    [Migration("20260319150317_2New")]
-    partial class _2New
+    [Migration("20260320073317_First")]
+    partial class First
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -321,7 +321,7 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.HasOne("WorkBoard.Domain.Entities.Project", "Project")
                         .WithMany("Columns")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Project");
@@ -332,13 +332,13 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.HasOne("WorkBoard.Domain.Entities.Column", "Column")
                         .WithMany("Issues")
                         .HasForeignKey("ColumnId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("WorkBoard.Domain.Entities.Project", "Project")
                         .WithMany("Issues")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Column");
@@ -351,7 +351,7 @@ namespace WorkBoard.Infrastructure.Migrations
                     b.HasOne("WorkBoard.Domain.Entities.Workspace", "Workspace")
                         .WithMany("Projects")
                         .HasForeignKey("WorkspaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Workspace");
