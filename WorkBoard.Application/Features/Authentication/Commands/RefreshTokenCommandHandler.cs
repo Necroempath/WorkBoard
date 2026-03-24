@@ -23,7 +23,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
 
     public async Task<RefreshResponseDto> Handle(RefreshTokenCommand command, CancellationToken ct)
     {
-        var refreshToken = await _refreshTokenRepository.GetByTokenAsync(command.Request.Token, ct);
+        var refreshToken = await _refreshTokenRepository.GetByTokenAsync(command.RefreshToken, ct);
 
         if (refreshToken is null || refreshToken.RevokedAt != null || refreshToken.ReplacedByTokenId != null)
             throw new InvalidOperationException("Invalid Refresh Token");

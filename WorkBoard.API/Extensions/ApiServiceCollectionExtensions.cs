@@ -10,6 +10,7 @@ public static class ApiServiceCollectionExtensions
         services.AddHttpContextAccessor();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<ICurrentWorkspaceService, CurrentWorkspaceService>();
+        services.AddScoped<ICookieService, CookieService>();
 
         return services;
     }

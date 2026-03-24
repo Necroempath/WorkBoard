@@ -2,4 +2,4 @@
 
 namespace WorkBoard.Application.Features.Authentication.Commands;
 
-public record RefreshTokenCommand(RefreshTokenRequest Request) : IRequest<RefreshResponseDto>;
+public record RefreshTokenCommand(string RefreshToken) : IRequest<RefreshResponseDto>;
