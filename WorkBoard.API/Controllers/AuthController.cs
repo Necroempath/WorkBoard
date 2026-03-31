@@ -6,7 +6,7 @@ using WorkBoard.Application.Features.Authentication.Commands;
 
 namespace WorkBoard.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("auth")]
 [ApiController]
 public class AuthController : ControllerBase
 {

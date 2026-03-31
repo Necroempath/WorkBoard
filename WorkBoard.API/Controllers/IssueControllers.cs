@@ -7,7 +7,7 @@ using WorkBoard.Application.Features.Issues.Queries;
 
 namespace WorkBoard.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("issues")]
 [ApiController]
 [Authorize]
 public sealed class IssueControllers : ControllerBase
@@ -42,6 +42,13 @@ public sealed class IssueControllers : ControllerBase
     {
         return Ok(await _mediator.Send(new UpdateIssueCommand(dto, dto.ColumnId), token));
     }
+
+    [HttpPatch]
+    public async Task<ActionResult<IssueResponseDto>> Move([FromBody] MoveIssueRequest dto, CancellationToken token)
+    {
+        return Ok(await _mediator.Send(new MoveIssueCommand(dto, dto.IssueId), token));
+    }
+
     [HttpDelete]
     public async Task<ActionResult<bool>> Delete([FromBody]Guid issueId, CancellationToken token)
     {

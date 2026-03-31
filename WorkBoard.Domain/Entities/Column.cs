@@ -16,6 +16,7 @@ public sealed class Column : BaseEntity
 
     internal Column(string name, Guid projectId, int order)
     {
+        Id = Guid.NewGuid();
         SetName(name);
         SetProjectId(projectId);
         SetOrder(order);

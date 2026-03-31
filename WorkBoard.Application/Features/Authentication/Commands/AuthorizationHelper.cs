@@ -20,7 +20,7 @@ public sealed class AuthorizationHelper
 
         var authResponseDto = mapper.Map<AuthResponseDto>(user);
 
-        authResponseDto.Jwt = jwt;
+        authResponseDto.AccessToken = jwt;
         authResponseDto.RefreshToken = token;
 
         return authResponseDto;

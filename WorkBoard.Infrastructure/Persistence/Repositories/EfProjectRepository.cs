@@ -17,8 +17,6 @@ public sealed class EfProjectRepository : IProjectRepository
     {
         await _context.Projects.AddAsync(project, token);
 
-        await _context.SaveChangesAsync(token);
-
         return project;
     }
 
@@ -40,7 +38,10 @@ public sealed class EfProjectRepository : IProjectRepository
 
     public async Task<Project?> GetByIdAsync(Guid projectId, CancellationToken token)
     {
-        return await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId, token);
+        return await _context.Projects
+            .Include(p => p.Columns)
+            .ThenInclude(c => c.Issues)
+            .FirstOrDefaultAsync(p => p.Id == projectId, token);
     }
 
     public async Task SaveAsync(CancellationToken token)

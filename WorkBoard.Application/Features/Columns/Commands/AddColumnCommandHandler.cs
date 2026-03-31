@@ -7,7 +7,7 @@ using WorkBoard.Domain.Extensions;
 
 namespace WorkBoard.Application.Features.Columns.Commands;
 
-public sealed class AddColumnCommandHandler : IRequestHandler<AddColumnCommand, ProjectResponseDto>
+public sealed class AddColumnCommandHandler : IRequestHandler<AddColumnCommand, ColumnResponseDto>
 {
     private readonly IProjectRepository _projectRepository;
     private readonly ICurrentWorkspaceService _currentWorkspace;
@@ -21,7 +21,7 @@ public sealed class AddColumnCommandHandler : IRequestHandler<AddColumnCommand, 
         _mapper = mapper;
     }
 
-    public async Task<ProjectResponseDto> Handle(AddColumnCommand request, CancellationToken ct)
+    public async Task<ColumnResponseDto> Handle(AddColumnCommand request, CancellationToken ct)
     {
         if (!_currentWorkspace.Membership.Role.CanManageProjects())
             throw new InvalidOperationException("Only Owner or Admins can manage projects");
@@ -29,10 +29,10 @@ public sealed class AddColumnCommandHandler : IRequestHandler<AddColumnCommand, 
         var project = await _projectRepository.GetByIdAsync(request.ProjectId, ct)
             ?? throw new InvalidOperationException("Invalid Project Id");
 
-        project.AddColumn(request.Name);
+        var column = project.AddColumn(request.Name);
 
         await _projectRepository.SaveAsync(ct);
 
-        return _mapper.Map<ProjectResponseDto>(project);
+        return _mapper.Map<ColumnResponseDto>(column);
     }
 }

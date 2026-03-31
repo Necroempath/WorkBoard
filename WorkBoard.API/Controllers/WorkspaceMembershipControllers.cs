@@ -7,7 +7,7 @@ using WorkBoard.Application.Features.WorkspaceMemberships.Queries;
 
 namespace WorkBoard.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("memberships")]
 [ApiController]
 [Authorize]
 public sealed class WorkspaceMembershipControllers : ControllerBase

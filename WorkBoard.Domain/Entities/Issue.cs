@@ -37,20 +37,20 @@ public sealed class Issue : BaseEntity
         SetDescription(description);
     }
 
+    public void SetColumnId(Guid columnId)
+    {
+        if (columnId == Guid.Empty)
+            throw new ArgumentException("ColumnId cannot be empty");
+
+        ColumnId = columnId;
+    }
+
     internal void SetOrder(int order)
     {
         if (order < 0)
             throw new ArgumentException("Issue order cannot be negative");
 
         Order = order;
-    }
-
-    internal void SetColumnId(Guid columnId)
-    {
-        if (columnId == Guid.Empty)
-            throw new ArgumentException("ColumnId cannot be empty");
-
-        ColumnId = columnId;
     }
 
     private void SetTitle(string title)

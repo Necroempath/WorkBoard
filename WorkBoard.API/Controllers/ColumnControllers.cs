@@ -7,7 +7,7 @@ using WorkBoard.Application.Features.Columns.Commands;
 
 namespace WorkBoard.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("columns")]
 [ApiController]
 [Authorize]
 public sealed class ColumnControllers : ControllerBase

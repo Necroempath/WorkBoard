@@ -30,8 +30,9 @@ public sealed class UpdateIssueRequest
     public IssuePriority Priority { get; set; }
 }
 
-public sealed class ReorderIssueRequest
+public sealed class MoveIssueRequest
 {
-    public Guid ColumnId { get; set; }
-    public int Order { get; set; }
+    public Guid IssueId { get; set; }
+    public Guid TargetColumnId { get; set; }
+    public int NewOrder { get; set; }
 }

@@ -4,11 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using WorkBoard.Application.Features.Projects;
 using WorkBoard.Application.Features.Projects.Commands;
 using WorkBoard.Application.Features.Projects.Queries;
-using WorkBoard.Application.Features.Workspaces;
 
 namespace WorkBoard.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("projects")]
 [ApiController]
 [Authorize]
 public sealed class ProjectControllers : ControllerBase

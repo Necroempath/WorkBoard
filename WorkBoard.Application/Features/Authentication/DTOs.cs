@@ -5,7 +5,7 @@ public sealed class AuthResponseDto
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public string Jwt { get; set; } = string.Empty;
+    public string AccessToken { get; set; } = string.Empty;
     public string RefreshToken { get; set; } = string.Empty;
     public IReadOnlyCollection<string> Roles { get; set; } = new List<string>();
 }
