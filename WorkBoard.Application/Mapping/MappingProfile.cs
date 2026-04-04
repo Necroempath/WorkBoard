@@ -14,7 +14,9 @@ sealed class MappingProfile : Profile
     public MappingProfile()
     {
         // Workspace 
-        CreateMap<Workspace, WorkspaceResponseDto>();
+        CreateMap<Workspace, WorkspaceResponseDto>()
+            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Members.FirstOrDefault()!.Role));
+
         CreateMap<CreateWorkspaceRequest, Workspace>();
 
         // WorkspaceMembership

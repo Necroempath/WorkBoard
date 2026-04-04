@@ -23,7 +23,10 @@ public sealed class EfWorkspaceRepository : IWorkspaceRepository
 
     public async Task<IEnumerable<Workspace>> GetAllAsync(Guid userId, CancellationToken token)
     {
-        return await _context.Workspaces.Where(w => w.Members.Any(wm => wm.MemberId == userId)).ToListAsync(token);
+        return await _context.Workspaces.Where(w => w.Members.Any(wm => wm.MemberId == userId))
+            .Include(w => w.Members
+            .Where(m => m.MemberId == userId))
+            .ToListAsync(token);
     }
 
     public async Task<Workspace?> GetByIdAsync(Guid id, Guid userId, CancellationToken token)

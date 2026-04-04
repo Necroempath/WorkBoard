@@ -31,17 +31,17 @@ public sealed class AddMemberCommandHandler : IRequestHandler<AddMemberCommand, 
         if (command.Request.Role == WorkspaceRole.Owner)
             throw new InvalidOperationException("Only one Owner allowed per Workspace");
 
-        var user = await _userRepository.GetByIdAsync(command.Request.MemberId, ct);
+        var user = await _userRepository.GetByEmailAsync(command.Request.Email, ct);
 
         if (user is null)
-            throw new InvalidOperationException("Invalid User Id");
+            throw new InvalidOperationException("USER_NOT_FOUND");
 
-        var membership = await _membershipRepository.GetMembershipAsync(command.Request.MemberId, _currentWorkspace.WorkspaceId, ct);
+        var membership = await _membershipRepository.GetMembershipAsync(user.Id, _currentWorkspace.WorkspaceId, ct);
 
         if (membership is not null)
-            throw new InvalidOperationException($"Chosen User is already a member");
+            throw new InvalidOperationException($"ALREADY_MEMBER");
 
-        WorkspaceMembership newMembership = new(command.Request.MemberId, _currentWorkspace.WorkspaceId, command.Request.Role, DateTimeOffset.UtcNow);
+        WorkspaceMembership newMembership = new(user.Id, _currentWorkspace.WorkspaceId, command.Request.Role, DateTimeOffset.UtcNow);
         
         await _membershipRepository.AddMembershipAsync(newMembership, ct);
 

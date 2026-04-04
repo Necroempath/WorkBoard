@@ -19,6 +19,12 @@ public sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.Property(x => x.WorkspaceId)
             .IsRequired();
 
+        builder.Navigation(x => x.Issues)
+        .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.Navigation(x => x.Columns)
+         .UsePropertyAccessMode(PropertyAccessMode.Field);
+
         builder.Property(x => x.CreatedAt)
             .HasDefaultValueSql("GETUTCDATE()")
             .IsRequired();

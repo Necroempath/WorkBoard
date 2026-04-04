@@ -8,11 +8,14 @@ namespace WorkBoard.Application.Features.Issues.Commands;
 public sealed record DeleteIssueCommandHandler : IRequestHandler<DeleteIssueCommand, bool>
 {
     private readonly IIssueRepository _issueRepository;
+    private readonly IProjectRepository _projectRepository;
     private readonly ICurrentWorkspaceService _currentWorkspace;
 
-    public DeleteIssueCommandHandler(IIssueRepository issueRepository, ICurrentWorkspaceService currentWorkspace)
+    public DeleteIssueCommandHandler(IIssueRepository issueRepository, IProjectRepository projectRepository,
+        ICurrentWorkspaceService currentWorkspace)
     {
         _issueRepository = issueRepository;
+        _projectRepository = projectRepository;
         _currentWorkspace = currentWorkspace;
     }
 

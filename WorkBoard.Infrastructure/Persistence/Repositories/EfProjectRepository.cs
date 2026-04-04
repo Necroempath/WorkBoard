@@ -49,10 +49,18 @@ public sealed class EfProjectRepository : IProjectRepository
         await _context.SaveChangesAsync(token);
     }
 
+    public async Task SaveColumnAsync(Column column, CancellationToken token)
+    {
+        await _context.Columns.AddAsync(column, token);
+
+        await _context.SaveChangesAsync(token);
+    }
+
     public async Task<Column?> GetColumnByIdAsync(Guid columnId, CancellationToken token)
     {
         return await _context.Columns
             .Include(c => c.Project)
+            .ThenInclude(p => p.Columns)
             .Include(c => c.Issues)
             .FirstOrDefaultAsync(c => c.Id == columnId, token);
     }

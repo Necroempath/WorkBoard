@@ -40,7 +40,7 @@ public sealed class IssueControllers : ControllerBase
     [HttpPut]
     public async Task<ActionResult<IssueResponseDto>> Update([FromBody]UpdateIssueRequest dto, CancellationToken token)
     {
-        return Ok(await _mediator.Send(new UpdateIssueCommand(dto, dto.ColumnId), token));
+        return Ok(await _mediator.Send(new UpdateIssueCommand(dto, dto.Id), token));
     }
 
     [HttpPatch]
@@ -49,8 +49,8 @@ public sealed class IssueControllers : ControllerBase
         return Ok(await _mediator.Send(new MoveIssueCommand(dto, dto.IssueId), token));
     }
 
-    [HttpDelete]
-    public async Task<ActionResult<bool>> Delete([FromBody]Guid issueId, CancellationToken token)
+    [HttpDelete("{issueId}")]
+    public async Task<ActionResult<bool>> Delete(Guid issueId, CancellationToken token)
     {
         return Ok(await _mediator.Send(new DeleteIssueCommand(issueId), token));
     }

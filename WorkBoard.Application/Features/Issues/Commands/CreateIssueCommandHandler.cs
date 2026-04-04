@@ -28,14 +28,12 @@ public sealed class CreateIssueCommandHandler : IRequestHandler<CreateIssueComma
         if (!_currentWorkspace.Membership.Role.CanManageProjects())
             throw new InvalidOperationException("Only Owner or Admins can create issues");
 
-        Issue issue = _mapper.Map<Issue>(command.Request);
-
         var column = await _projectRepository.GetColumnByIdAsync(command.ColumnId, ct)
             ?? throw new InvalidOperationException("Invalid column Id");
 
-        column.AddIssue(command.Request.Title, command.Request.Description, command.Request.Priority, command.Request.ProjectId);
+        var issue = column.AddIssue(command.Request.Title, command.Request.Description, command.Request.Priority, command.Request.ProjectId);
 
-        await _projectRepository.SaveAsync(ct);
+        await _issueRepository.CreateAsync(issue, ct);
 
         return _mapper.Map<IssueResponseDto>(issue);
     }

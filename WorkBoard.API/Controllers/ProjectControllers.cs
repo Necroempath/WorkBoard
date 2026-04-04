@@ -42,4 +42,10 @@ public sealed class ProjectControllers : ControllerBase
     {
         return Ok(await _mediator.Send(new DeleteProjectCommand(projectId), token));
     }
+
+    [HttpPut]
+    public async Task<ActionResult<bool>> Update([FromBody] UpdateProjectRequest dto, CancellationToken token)
+    {
+        return Ok(await _mediator.Send(new UpdateProjectCommand(dto.Name, dto.Id), token));
+    }
 }

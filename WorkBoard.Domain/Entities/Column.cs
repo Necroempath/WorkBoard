@@ -1,11 +1,12 @@
 ﻿using WorkBoard.Domain.Enums;
+using WorkBoard.Domain.Shared;
 
 namespace WorkBoard.Domain.Entities;
 
 public sealed class Column : BaseEntity
 {
     public string Name { get; private set; } = string.Empty;
-    public int Order { get; private set; }
+    public decimal Order { get; private set; }
     public Guid ProjectId { get; private set; }
     public Project Project { get; private set; }
 
@@ -37,10 +38,27 @@ public sealed class Column : BaseEntity
 
     public Issue AddIssue(string title, string? description, IssuePriority priority, Guid projectId)
     {
-        var issue = new Issue(title, Id, projectId, _issues.Count, priority, description);
+        var lastOrder = _issues
+            .OrderBy(i => i.Order)
+            .LastOrDefault()?.Order;
+
+        var newOrder = OrderHelper.GetNewOrder(lastOrder, null);
+
+        var issue = new Issue(Guid.NewGuid(), title, Id, projectId, newOrder, priority, description);
 
         _issues.Add(issue);
+
         return issue;
+    }
+
+    public (decimal? prev, decimal? next) GetNeighbors(int index)
+    {
+        var ordered = _issues.OrderBy(i => i.Order).ToList();
+
+        decimal? prev = index > 0 ? ordered[index - 1].Order : null;
+        decimal? next = index < ordered.Count ? ordered[index].Order : null;
+
+        return (prev, next);
     }
 
     public void RemoveIssue(Guid issueId)

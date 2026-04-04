@@ -19,10 +19,21 @@ public sealed class ColumnControllers : ControllerBase
         _mediator = mediator;
     }
 
-
     [HttpPost]
-    public async Task<ActionResult<WorkspaceResponseDto>> Add([FromBody] CreateColumnRequest dto, CancellationToken token)
+    public async Task<ActionResult<ColumnResponseDto>> Add([FromBody] CreateColumnRequest dto, CancellationToken token)
     {
         return Ok(await _mediator.Send(new AddColumnCommand(dto.Name, dto.ProjectId), token));
+    }
+
+    [HttpPut]
+    public async Task<ActionResult<ColumnResponseDto>> Update([FromBody] UpdateColumnRequest dto, CancellationToken token)
+    {
+        return Ok(await _mediator.Send(new UpdateColumnCommand(dto.Name, dto.Id), token));
+    }
+
+    [HttpDelete("{columnId}")]
+    public async Task<ActionResult<ColumnResponseDto>> Delete(Guid columnId, CancellationToken token)
+    {
+        return Ok(await _mediator.Send(new DeleteColumnCommand(columnId), token));
     }
 }

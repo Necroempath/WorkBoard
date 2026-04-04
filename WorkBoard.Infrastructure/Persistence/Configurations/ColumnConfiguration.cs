@@ -16,11 +16,11 @@ public sealed class ColumnConfiguration : IEntityTypeConfiguration<Column>
             .IsRequired()
             .HasMaxLength(50);
 
-        builder.Property(x => x.Name)
-            .IsRequired(false);
-
         builder.Property(x => x.ProjectId)
             .IsRequired();
+
+        builder.Navigation(x => x.Issues)
+          .UsePropertyAccessMode(PropertyAccessMode.Field);
 
         builder.Property(x => x.CreatedAt)
             .HasDefaultValueSql("GETUTCDATE()")

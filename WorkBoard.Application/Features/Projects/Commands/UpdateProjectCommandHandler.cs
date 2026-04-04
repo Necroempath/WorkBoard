@@ -4,23 +4,22 @@ using WorkBoard.Application.Abstractions;
 using WorkBoard.Application.Abstractions.Repositories;
 using WorkBoard.Domain.Extensions;
 
-namespace WorkBoard.Application.Features.Columns.Commands;
+namespace WorkBoard.Application.Features.Projects.Commands;
 
-public sealed class AddColumnCommandHandler : IRequestHandler<AddColumnCommand, ColumnResponseDto>
+public sealed class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand, ProjectResponseDto>
 {
     private readonly IProjectRepository _projectRepository;
     private readonly ICurrentWorkspaceService _currentWorkspace;
     private readonly IMapper _mapper;
 
-
-    public AddColumnCommandHandler(IProjectRepository projectRepository, ICurrentWorkspaceService currentWorkspace, IMapper mapper)
+    public UpdateProjectCommandHandler(IProjectRepository projectRepository, ICurrentWorkspaceService currentWorkspace, IMapper mapper)
     {
         _projectRepository = projectRepository;
         _currentWorkspace = currentWorkspace;
         _mapper = mapper;
     }
 
-    public async Task<ColumnResponseDto> Handle(AddColumnCommand request, CancellationToken ct)
+    public async Task<ProjectResponseDto> Handle(UpdateProjectCommand request, CancellationToken ct)
     {
         if (!_currentWorkspace.Membership.Role.CanManageProjects())
             throw new InvalidOperationException("Only Owner or Admins can manage projects");
@@ -28,10 +27,9 @@ public sealed class AddColumnCommandHandler : IRequestHandler<AddColumnCommand, 
         var project = await _projectRepository.GetByIdAsync(request.ProjectId, ct)
             ?? throw new InvalidOperationException("Invalid Project Id");
 
-        var column = project.AddColumn(request.Name);
+        project.Rename(request.Name);
+        await _projectRepository.SaveAsync(ct);
 
-        await _projectRepository.SaveColumnAsync(column, ct);
-
-        return _mapper.Map<ColumnResponseDto>(column);
+        return _mapper.Map<ProjectResponseDto>(project);
     }
 }
