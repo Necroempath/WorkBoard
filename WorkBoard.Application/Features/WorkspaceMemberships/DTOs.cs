@@ -4,17 +4,25 @@ namespace WorkBoard.Application.Features.WorkspaceMemberships;
 
 public sealed class WorkspaceMembershipResponseDto
 {
-    public Guid MemberId { get; set; }
-    public Guid WorkspaceId { get; set; }
-    public string MemberName { get; set; } = string.Empty;
-    public string WorkspaceName { get; set; } = string.Empty;
-    public string MemberEmail { get; set; } = string.Empty;
-    public WorkspaceRole MemberRole { get; set; }
-    public DateTimeOffset JoinedAt { get; set; }
+    public WorkspaceRole CurrentUserRole { get; set; }
+    public MembershipDto[] Members { get; set; } = null!;
+}
+public sealed class MembershipDto
+{
+    public Guid UserId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public WorkspaceRole Role { get; set; }
 }
 
 public sealed class AddMemberRequest
 {
     public string Email { get; set; } = string.Empty;
+    public WorkspaceRole Role { get; set; }
+}
+
+public sealed class ChangeRoleRequest
+{
+    public Guid UserId { get; set; }
     public WorkspaceRole Role { get; set; }
 }

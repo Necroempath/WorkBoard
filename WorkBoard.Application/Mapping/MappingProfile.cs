@@ -20,12 +20,7 @@ sealed class MappingProfile : Profile
         CreateMap<CreateWorkspaceRequest, Workspace>();
 
         // WorkspaceMembership
-        CreateMap<WorkspaceMembership, WorkspaceMembershipResponseDto>()
-            .ForMember(dest => dest.MemberId, opt => opt.MapFrom(src => src.MemberId))
-            .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
-            .ForMember(dest => dest.MemberRole, opt => opt.MapFrom(src => src.Role))
-            .ForMember(dest => dest.WorkspaceName, opt => opt.MapFrom(src => src.Workspace.Name))
-            .ForMember(dest => dest.MemberEmail, opt => opt.MapFrom(src => src.Member.Email));
+        CreateMap<WorkspaceMembership, WorkspaceMembershipResponseDto>();
 
         // Auth
         CreateMap<User, AuthResponseDto>()

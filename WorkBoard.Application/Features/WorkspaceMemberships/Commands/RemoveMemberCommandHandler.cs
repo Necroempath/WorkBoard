@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using WorkBoard.Application.Abstractions.Repositories;
 using WorkBoard.Application.Abstractions;
-using WorkBoard.Domain.Entities;
 using WorkBoard.Domain.Extensions;
 
 namespace WorkBoard.Application.Features.WorkspaceMemberships.Commands;
@@ -11,28 +9,28 @@ public sealed class RemoveMemberCommandHandler : IRequestHandler<RemoveMemberCom
 {
     private readonly IWorkspaceMembershipRepository _membershipRepository;
     private readonly ICurrentWorkspaceService _currentWorkspace;
-    private readonly IMapper _mapper;
 
-    public RemoveMemberCommandHandler(IWorkspaceMembershipRepository membershipRepository,
-        ICurrentWorkspaceService currentWorkspace, IMapper mapper)
+    public RemoveMemberCommandHandler(IWorkspaceMembershipRepository membershipRepository, ICurrentWorkspaceService currentWorkspace)
     {
         _membershipRepository = membershipRepository;
         _currentWorkspace = currentWorkspace;
-        _mapper = mapper;
     }
 
     public async Task<bool> Handle(RemoveMemberCommand command, CancellationToken ct)
     {
-        if (!_currentWorkspace.Membership.Role.CanDeleteMembers())
-            throw new InvalidOperationException("Don't have permission to remove members");
+        var userToRemove = await _membershipRepository.GetMembershipAsync(command.MemberId, _currentWorkspace.WorkspaceId, ct) ??
+            throw new InvalidOperationException("USER_NOT_FOUND");
+
+        if (!_currentWorkspace.Membership.Role.CanDeleteMembers(userToRemove.Role))
+            throw new InvalidOperationException("NO_PERMISSION");
 
         if (_currentWorkspace.Membership.MemberId == command.MemberId)
-            throw new InvalidOperationException("Can't remove yourself, silly");
+            throw new InvalidOperationException("SELF_DESTRUCTION");
 
         var isDeleted = await _membershipRepository.RemoveMemberAsync(command.MemberId, _currentWorkspace.WorkspaceId, ct);
 
         if (!isDeleted)
-            throw new InvalidOperationException("Invalid Member Id");
+            throw new InvalidOperationException("USER_NOT_FOUND");
 
         return isDeleted;
     }

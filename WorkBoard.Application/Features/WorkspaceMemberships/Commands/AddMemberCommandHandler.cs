@@ -25,7 +25,7 @@ public sealed class AddMemberCommandHandler : IRequestHandler<AddMemberCommand, 
 
     public async Task<WorkspaceMembershipResponseDto> Handle(AddMemberCommand command, CancellationToken ct)
     {
-        if (!_currentWorkspace.Membership.Role.CanManageMembers())
+        if (!_currentWorkspace.Membership.Role.CanInviteMembers())
             throw new InvalidOperationException("Admins or Owner only allowed for this action");
 
         if (command.Request.Role == WorkspaceRole.Owner)

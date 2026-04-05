@@ -19,7 +19,7 @@ public sealed class WorkspaceMembershipControllers : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet]
+    [HttpGet("{workspaceId}")]
     public async Task<ActionResult<IEnumerable<WorkspaceMembershipResponseDto>>> GetAllMembers(Guid workspaceId, CancellationToken token)
     {
         return Ok(await _mediator.Send(new GetAllMembersQuery(workspaceId), token));
@@ -32,8 +32,14 @@ public sealed class WorkspaceMembershipControllers : ControllerBase
     }
 
     [HttpDelete("{workspaceId}")]
-    public async Task<ActionResult<bool>> RemoveMember([FromBody]Guid memberId, Guid workspaceId, CancellationToken token)
+    public async Task<ActionResult<bool>> RemoveMember([FromBody]Guid userId, Guid workspaceId, CancellationToken token)
     {
-        return Ok(await _mediator.Send(new RemoveMemberCommand(memberId, workspaceId), token));
+        return Ok(await _mediator.Send(new RemoveMemberCommand(userId, workspaceId), token));
+    }
+
+    [HttpPut("{workspaceId}")]
+    public async Task<ActionResult<bool>> ChangeRole(ChangeRoleRequest dto, Guid workspaceId, CancellationToken token)
+    {
+        return Ok(await _mediator.Send(new ChangeRoleCommand(dto, workspaceId), token));
     }
 }

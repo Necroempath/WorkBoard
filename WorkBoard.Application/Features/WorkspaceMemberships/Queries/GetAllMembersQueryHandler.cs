@@ -2,11 +2,10 @@
 using MediatR;
 using WorkBoard.Application.Abstractions;
 using WorkBoard.Application.Abstractions.Repositories;
-using WorkBoard.Domain.Extensions;
 
 namespace WorkBoard.Application.Features.WorkspaceMemberships.Queries;
 
-public sealed class GetAllMembersQueryHandler : IRequestHandler<GetAllMembersQuery,  IEnumerable<WorkspaceMembershipResponseDto>>
+public sealed class GetAllMembersQueryHandler : IRequestHandler<GetAllMembersQuery,  WorkspaceMembershipResponseDto>
 {
     private readonly IWorkspaceMembershipRepository _membershipRepository;
     private readonly ICurrentWorkspaceService _currentWorkspace;
@@ -19,13 +18,21 @@ public sealed class GetAllMembersQueryHandler : IRequestHandler<GetAllMembersQue
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<WorkspaceMembershipResponseDto>> Handle(GetAllMembersQuery request, CancellationToken ct)
+    public async Task<WorkspaceMembershipResponseDto> Handle(GetAllMembersQuery request, CancellationToken ct)
     {
-        if (!_currentWorkspace.Membership.Role.CanViewMembers())
-            throw new InvalidOperationException("Members, Admins or Owner only allowed for this action");
-
         var members = await _membershipRepository.GetMembersAsync(_currentWorkspace.WorkspaceId, ct);
 
-        return _mapper.Map<IEnumerable<WorkspaceMembershipResponseDto>>(members);
+        WorkspaceMembershipResponseDto dto = new() { CurrentUserRole = _currentWorkspace.Membership.Role };
+
+        List<MembershipDto> dtos = new();
+
+        foreach (var member in members)
+        {
+            dtos.Add(new() { UserId = member.MemberId, Name = member.Member.Name, Email = member.Member.Email, Role = member.Role });
+        }
+
+        dto.Members = [.. dtos];
+
+        return dto;
     }
 }
