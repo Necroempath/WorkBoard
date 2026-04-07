@@ -31,13 +31,13 @@ public sealed class WorkspaceMembershipControllers : ControllerBase
         return Ok(await _mediator.Send(new AddMemberCommand(dto, workspaceId), token));
     }
 
-    [HttpDelete("{workspaceId}")]
-    public async Task<ActionResult<bool>> RemoveMember([FromBody]Guid userId, Guid workspaceId, CancellationToken token)
+    [HttpDelete("{workspaceId}/{userId}")]
+    public async Task<ActionResult<bool>> RemoveMember(Guid userId, Guid workspaceId, CancellationToken token)
     {
         return Ok(await _mediator.Send(new RemoveMemberCommand(userId, workspaceId), token));
     }
 
-    [HttpPut("{workspaceId}")]
+    [HttpPut("{workspaceId}/role")]
     public async Task<ActionResult<bool>> ChangeRole(ChangeRoleRequest dto, Guid workspaceId, CancellationToken token)
     {
         return Ok(await _mediator.Send(new ChangeRoleCommand(dto, workspaceId), token));

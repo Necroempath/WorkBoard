@@ -27,7 +27,7 @@ public sealed class ChangeRoleCommandHandler : IRequestHandler<ChangeRoleCommand
         if (!_currentWorkspace.Membership.Role.CanAssignRole(userToManage.Role))
             throw new InvalidOperationException("NO_PERMISSION");
 
-        var membership = await _membershipRepository.ChangeRoleAsync(command.Request.UserId, command.Request.Role, ct);
+        var membership = await _membershipRepository.ChangeRoleAsync(command.Request.UserId, _currentWorkspace.WorkspaceId, command.Request.Role, ct);
 
         return _mapper.Map<WorkspaceMembershipResponseDto>(membership);
     }

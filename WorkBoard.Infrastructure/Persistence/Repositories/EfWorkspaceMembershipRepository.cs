@@ -23,9 +23,10 @@ public sealed class EfWorkspaceMembershipRepository : IWorkspaceMembershipReposi
         return membership;
     }
 
-    public async Task<WorkspaceMembership?> ChangeRoleAsync(Guid id, WorkspaceRole role, CancellationToken ct)
+    public async Task<WorkspaceMembership?> ChangeRoleAsync(Guid memberId, Guid workspaceId, WorkspaceRole role, CancellationToken ct)
     {
-        var membership = await _context.WorkspaceMemberships.FirstOrDefaultAsync(wm => wm.Id == id);
+        var membership = await _context.WorkspaceMemberships
+            .FirstOrDefaultAsync(wm => wm.MemberId == memberId && wm.WorkspaceId == workspaceId, ct);
 
         if (membership is null)
             return null;

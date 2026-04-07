@@ -1,11 +1,13 @@
-﻿namespace WorkBoard.Application.Features.Workspaces;
+﻿using WorkBoard.Domain.Enums;
+
+namespace WorkBoard.Application.Features.Workspaces;
 
 public sealed class WorkspaceResponseDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public Guid OwnerId { get; set; }
-    public string Role { get; set; } = string.Empty;
+    public WorkspaceRole Role { get; set; }
 }
 public sealed class CreateWorkspaceRequest
 {
