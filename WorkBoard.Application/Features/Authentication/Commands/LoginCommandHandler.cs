@@ -34,7 +34,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDto
 
         if (!_hasher.Verify(command.Request.Password, user.PasswordHash))
             throw new ArgumentException("Invalid email or password");
-
         return AuthorizationHelper.SetUpTokens(user, _refreshTokenRepository, _jwtGenerator, _refreshTokenGenerator, _mapper, ct);
     }
 }

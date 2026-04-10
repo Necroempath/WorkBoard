@@ -15,6 +15,12 @@ public static class AuthenticationExtensions
         services.Configure<RefreshTokenSettings>(
             configuration.GetSection(RefreshTokenSettings.SectionName));
 
+        services.Configure<PasswordResetTokenSettings>(
+            configuration.GetSection(PasswordResetTokenSettings.SectionName));
+
+        services.Configure<EmailSettings>(
+            configuration.GetSection(EmailSettings.SectionName));
+
         var jwtSettings = configuration
             .GetSection(JwtSettings.SectionName)
             .Get<JwtSettings>();

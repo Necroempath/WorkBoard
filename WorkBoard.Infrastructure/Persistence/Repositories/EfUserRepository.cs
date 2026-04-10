@@ -36,4 +36,10 @@ public sealed class EfUserRepository : IUserRepository
             .ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(u => u.Id == id, token);
     }
+
+    public async Task SaveAsync(CancellationToken token)
+    {
+        await _context.SaveChangesAsync(token);
+    }
+
 }

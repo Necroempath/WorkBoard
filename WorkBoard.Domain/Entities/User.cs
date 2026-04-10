@@ -15,6 +15,8 @@ public sealed class User : BaseEntity
     private readonly List<RefreshToken> _refreshTokens = new();
     public IReadOnlyCollection<RefreshToken> RefreshTokens => _refreshTokens;
 
+    private readonly List<PasswordResetToken> _passwordResetTokens = new();
+    public IReadOnlyCollection<PasswordResetToken> PasswordResetTokens => _passwordResetTokens;
 
     private User() { }
 

@@ -21,10 +21,13 @@ public static class InfrastructureExtensions
         services.AddScoped<IRoleRepository, EfRoleRepository>();
         services.AddScoped<IWorkspaceMembershipRepository, EfWorkspaceMembershipRepository>();
         services.AddScoped<IRefreshTokenRepository, EfRefreshTokenRepository>();
+        services.AddScoped<IPasswordResetTokenRepository, EfPasswordResetTokenRepository>();
 
         services.AddScoped<IRefreshTokenGenerator, RefreshTokenGenerator>();
+        services.AddScoped<IPasswordResetTokenGenerator, PasswordResetTokenGenerator>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
+        services.AddScoped<IEmailService, EmailService>();
 
         return services;
     }

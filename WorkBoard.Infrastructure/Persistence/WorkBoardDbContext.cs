@@ -13,6 +13,7 @@ public sealed class WorkBoardDbContext : DbContext
     public DbSet<Issue> Issues => Set<Issue>();
     public DbSet<WorkspaceMembership> WorkspaceMemberships => Set<WorkspaceMembership>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
 
     public WorkBoardDbContext(DbContextOptions<WorkBoardDbContext> options) : base(options) { }
 

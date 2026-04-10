@@ -6,11 +6,11 @@ using WorkBoard.Infrastructure.Contracts;
 
 namespace WorkBoard.Infrastructure.Implementations;
 
-public sealed class RefreshTokenGenerator : IRefreshTokenGenerator
+public sealed class PasswordResetTokenGenerator : IPasswordResetTokenGenerator
 {
-    private readonly RefreshTokenSettings _settings;
+    private readonly PasswordResetTokenSettings _settings;
 
-    public RefreshTokenGenerator(IOptions<RefreshTokenSettings> settings)
+    public PasswordResetTokenGenerator(IOptions<PasswordResetTokenSettings> settings)
     {
         _settings = settings.Value;
     }
@@ -23,8 +23,9 @@ public sealed class RefreshTokenGenerator : IRefreshTokenGenerator
         var hash = Convert.ToHexString(
             SHA256.HashData(Encoding.UTF8.GetBytes(token)));
 
-        var expiresAt = DateTime.UtcNow.AddDays(_settings.ExpirationDays);
+        var expiresAt = DateTime.UtcNow.AddMinutes(_settings.ExpiryMinutes);
 
         return (token, hash, expiresAt);
-    }    
+    }
 }
+

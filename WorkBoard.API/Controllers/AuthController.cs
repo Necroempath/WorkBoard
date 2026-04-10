@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using WorkBoard.API.Services;
 using WorkBoard.Application.Features.Authentication;
 using WorkBoard.Application.Features.Authentication.Commands;
@@ -12,11 +13,13 @@ public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly ICookieService _cookieService;
+    private readonly IConfiguration _config;
 
-    public AuthController(IMediator mediator, ICookieService cookieService)
+    public AuthController(IMediator mediator, ICookieService cookieService, IConfiguration config)
     {
         _mediator = mediator;
         _cookieService = cookieService;
+        _config = config;
     }
 
     [HttpPost("register")]
@@ -52,6 +55,26 @@ public class AuthController : ControllerBase
         _cookieService.SetRefreshToken(Response, tokens.RefreshToken);
 
         return Ok(tokens.AccessToken);
+    }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordRequest dto, CancellationToken ct)
+    {
+        var baseUrl = _config.GetSection("Frontend").GetSection("BaseUrl").Value;
+
+        if (baseUrl is null) return NoContent();
+
+        await _mediator.Send(new ForgotPasswordCommand(dto, baseUrl), ct);
+
+        return Ok();
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest dto, CancellationToken ct)
+    {
+        await _mediator.Send(new ResetPasswordCommand(dto), ct);
+
+        return Ok();
     }
 
     [HttpPost("logout")]

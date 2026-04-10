@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using WorkBoard.Application.Common;
 
 namespace WorkBoard.Application.Features.Authentication.Validators;
 
@@ -24,3 +25,4 @@ public class RegisterValidator : AbstractValidator<RegisterRequest>
             .Equal(x => x.Password).WithMessage("Confirm Password must match Password");
     }
 }
+    

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using System.Text.RegularExpressions;
 
-namespace WorkBoard.Application.Features.Authentication.Validators;
+namespace WorkBoard.Application.Common;
 
 public static class PasswordValidationExtensionRule
 {
