@@ -30,10 +30,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDto
         var user = await _userRepository.GetByEmailAsync(command.Request.Email, ct);
 
         if (user is null)
-            throw new ArgumentException("Invalid email or password");
+            throw new ArgumentException("INVALID_CREDENTIALS");
 
         if (!_hasher.Verify(command.Request.Password, user.PasswordHash))
-            throw new ArgumentException("Invalid email or password");
+            throw new ArgumentException("INVALID_CREDENTIALS");
         return AuthorizationHelper.SetUpTokens(user, _refreshTokenRepository, _jwtGenerator, _refreshTokenGenerator, _mapper, ct);
     }
 }

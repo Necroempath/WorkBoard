@@ -42,6 +42,6 @@ public sealed class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswor
 
         var baseUrl = command.BaseUrl;
 
-        await _emailService.SendPasswordResetEmailAsync(user.Email, user.Name, $"{baseUrl}/reset-password?token=${token}");
+        await _emailService.SendPasswordResetEmailAsync(user.Email, user.Name, $"{baseUrl}/reset-password?token={Uri.EscapeDataString(token)}");
     }
 }

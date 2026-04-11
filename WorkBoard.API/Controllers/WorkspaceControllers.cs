@@ -25,6 +25,12 @@ public sealed class WorkspaceControllers : ControllerBase
         return Ok(await _mediator.Send(new GetAllWorkspacesQuery(), token));
     }
 
+    [HttpGet("role/{workspaceId}")]
+    public async Task<ActionResult<IEnumerable<WorkspaceResponseDto>>> GetRole(Guid workspaceId, CancellationToken token)
+    {
+        return Ok(await _mediator.Send(new GetRoleQuery(workspaceId), token));
+    }
+
     [HttpPost]
     public async Task<ActionResult<WorkspaceResponseDto>> Create([FromBody]CreateWorkspaceRequest dto, CancellationToken token)
     {

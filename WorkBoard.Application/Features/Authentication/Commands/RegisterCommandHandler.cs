@@ -33,7 +33,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthRespo
         var user = await _userRepository.GetByEmailAsync(command.Request.Email, ct);
 
         if (user is not null)
-            throw new InvalidOperationException($"User by given email {command.Request.Email} already exists");
+            throw new InvalidOperationException($"EMAIL_ALREADY_EXISTS");
 
         var hash = _hasher.Hash(command.Request.Password);
 
