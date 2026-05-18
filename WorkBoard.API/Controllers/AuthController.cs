@@ -35,6 +35,7 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponseDto>> Login([FromBody]LoginRequest request, CancellationToken token)
     {
+        Console.WriteLine($"?????\n{request.Email}");
         var authResponseDto = await _mediator.Send(new LoginCommand(request), token);
 
         _cookieService.SetRefreshToken(Response, authResponseDto.RefreshToken);

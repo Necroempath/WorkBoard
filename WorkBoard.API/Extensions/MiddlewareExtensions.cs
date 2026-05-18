@@ -7,7 +7,7 @@ public static class MiddlewareExtensions
     public static void UseInfrastructure(this WebApplication app)
     {
         app.UseAuthentication();
-        app.UseCors("AllowFrontend");
+        app.UseCors();
         app.UseAuthorization();
 
         app.UseExceptionHandler(errorApp =>

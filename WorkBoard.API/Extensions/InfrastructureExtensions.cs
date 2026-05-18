@@ -12,7 +12,13 @@ public static class InfrastructureExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<WorkBoardDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("Default")));
+        {
+            Console.WriteLine(configuration.GetConnectionString("Default"));
+            options.UseSqlServer(configuration.GetConnectionString("Default"), sql =>
+            {
+                sql.EnableRetryOnFailure();
+            });
+        });
 
         services.AddScoped<IWorkspaceRepository, EfWorkspaceRepository>();
         services.AddScoped<IProjectRepository, EfProjectRepository>();
